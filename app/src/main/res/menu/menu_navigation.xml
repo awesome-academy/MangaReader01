@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/itemHomeTab"
+          android:icon="@drawable/ic_home_black_24dp"
+          android:title="@string/textHome"/>
+    <item android:id="@+id/itemTrendingTab"
+          android:icon="@drawable/ic_trending_up_black_24dp"
+          android:title="@string/textTrending"/>
+    <item android:id="@+id/itemMyComicsTab"
+          android:icon="@drawable/ic_inbox_black_24dp"
+          android:title="@string/labelMyComics"/>
+</menu>
