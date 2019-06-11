@@ -3,5 +3,5 @@
     <string name="textSearchComic">Search comics…</string>
     <string name="textHome">Home</string>
     <string name="textTrending">Trending</string>
-    <string name="labelMyComics">My Comics</string>
+    <string name="textMyComics">My Comics</string>
 </resources>

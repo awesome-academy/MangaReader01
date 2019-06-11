@@ -8,5 +8,5 @@
           android:title="@string/textTrending"/>
     <item android:id="@+id/itemMyComicsTab"
           android:icon="@drawable/ic_inbox_black_24dp"
-          android:title="@string/labelMyComics"/>
+          android:title="@string/textMyComics"/>
 </menu>
