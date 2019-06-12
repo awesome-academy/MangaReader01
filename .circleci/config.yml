@@ -6,6 +6,10 @@ jobs:
       - image: circleci/android:api-28-alpha
     environment:
       JVM_OPTS: -Xmx3200m
+      # This is Android review pull request box (Not necessary to change)
+      ROOM_ID: "96370317"
+      # Insert the chatwork accounts which you want to mention when the pull request was verified
+      MEMBERS: "[To:3831219] [Toong-OE18-A] Le Hong Phuc"
     steps:
       - checkout
       - restore_cache:
@@ -28,4 +32,31 @@ jobs:
           destination: reports
       - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: app/build/test-results
-      # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
+
+      - run:
+          name: Sending notification on fail
+          when: on_fail
+          command: |
+            if [[ true ]];  then
+              curl -X POST -H "X-ChatWorkToken: $CHATWORK_API_KEY" -d \
+                "body= $MEMBERS [info][title]Repository : $CIRCLE_PROJECT_REPONAME (problem)[/title]Your pull request is failed (pray)
+              -> Click here for more detail: $CIRCLE_BUILD_URL
+              - Branch: $CIRCLE_BRANCH
+              - Pull request: $CIRCLE_PULL_REQUEST[/info]
+                "\
+                "https://api.chatwork.com/v2/rooms/$ROOM_ID/messages"
+            fi
+
+      - run:
+          name: Sending notification on success
+          when: on_success
+          command: |
+            if [[ true ]];  then
+              curl -X POST -H "X-ChatWorkToken: $CHATWORK_API_KEY" -d \
+                "body= $MEMBERS [info][title]Repository : $CIRCLE_PROJECT_REPONAME (ok2)[/title]Your pull request is successful (F)(F)(F)
+              -> Click here for more detail: $CIRCLE_BUILD_URL
+              - Branch: $CIRCLE_BRANCH
+              - Pull request: $CIRCLE_PULL_REQUEST[/info]
+                "\
+                "https://api.chatwork.com/v2/rooms/$ROOM_ID/messages"
+            fi
