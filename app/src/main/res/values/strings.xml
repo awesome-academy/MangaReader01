@@ -6,4 +6,7 @@
     <string name="text_my_comics">My Comics</string>
     <string name="text_read_now">Read now >></string>
     <string name="text_manga_cover">Manga Cover</string>
+    <string name="string_various_artist">Various Artist</string>
+    <string name="text_summary">Summary</string>
+    <string name="text_rating">(%.2f/5)</string>
 </resources>

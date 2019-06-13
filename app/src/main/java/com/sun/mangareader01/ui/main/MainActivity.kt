@@ -15,6 +15,7 @@ import com.sun.mangareader01.data.model.Manga
 import com.sun.mangareader01.data.source.repository.MangaRepository
 import com.sun.mangareader01.ui.adapter.CustomAdapter
 import com.sun.mangareader01.ui.adapter.SuggestionAdapter
+import com.sun.mangareader01.ui.detail.DetailFragment
 import com.sun.mangareader01.ui.home.HomeFragment
 import com.sun.mangareader01.ui.mycomics.MyComicsFragment
 import com.sun.mangareader01.ui.search.SearchFragment
@@ -95,10 +96,7 @@ class MainActivity : FragmentActivity(),
     }
 
     // On suggestion item click listener
-    override fun onItemClick(item: Manga) {
-        presenter.getMangaDetail(item)
-        showToast(item.toString())
-    }
+    override fun onItemClick(item: Manga) = openMangaDetail(item)
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -143,6 +141,10 @@ class MainActivity : FragmentActivity(),
 
     private fun setIsTypingSearch(isTyping: Boolean) {
         isTypingSearch = isTyping
+    }
+
+    private fun openMangaDetail(manga: Manga) {
+        replaceFragment(DetailFragment.newInstance(manga))
     }
 
     private fun displaySuggestions() {

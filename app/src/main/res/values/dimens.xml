@@ -9,4 +9,5 @@
     <dimen name="dp_64">64dp</dimen>
     <dimen name="dp_128">128dp</dimen>
     <dimen name="sp_18">18sp</dimen>
+    <dimen name="sp_20">20sp</dimen>
 </resources>
