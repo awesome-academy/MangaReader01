@@ -5,6 +5,11 @@ import com.sun.mangareader01.data.source.local.OnLoadedDataCallback
 
 interface MangaDataSource {
     interface Remote {
-        fun getMangas(query: String, callback: OnLoadedDataCallback<MangasResponse>)
+        fun getMangas(
+            query: String,
+            callback: OnLoadedDataCallback<MangasResponse>
+        )
     }
+
+    interface Local
 }

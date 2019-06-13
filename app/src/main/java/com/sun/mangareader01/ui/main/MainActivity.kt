@@ -13,7 +13,9 @@ import com.sun.mangareader01.ui.home.HomeFragment
 import com.sun.mangareader01.ui.mycomics.MyComicsFragment
 import com.sun.mangareader01.ui.search.SearchFragment
 import com.sun.mangareader01.ui.trending.TrendingFragment
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.listSuggestions
+import kotlinx.android.synthetic.main.activity_main.viewNavigationBar
+import kotlinx.android.synthetic.main.activity_main.viewSearch
 
 class MainActivity : FragmentActivity(),
     SearchView.OnQueryTextListener,
@@ -40,12 +42,17 @@ class MainActivity : FragmentActivity(),
         listSuggestions.onItemClickListener = this
     }
 
-    private fun replaceFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction().replace(
-            R.id.layoutContainerFragment,
-            fragment
-        ).addToBackStack(null).commit()
-    }
+    private fun addFragment(fragment: Fragment) =
+        supportFragmentManager.beginTransaction()
+            .add(R.id.layoutContainerFragment, fragment)
+            .addToBackStack(null)
+            .commit()
+
+    private fun replaceFragment(fragment: Fragment) =
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.layoutContainerFragment, fragment)
+            .addToBackStack(null)
+            .commit()
 
     override fun onQueryTextSubmit(query: String): Boolean {
         replaceFragment(SearchFragment.newInstance(query))
@@ -58,7 +65,12 @@ class MainActivity : FragmentActivity(),
         return true
     }
 
-    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+    override fun onItemClick(
+        parent: AdapterView<*>?,
+        view: View?,
+        position: Int,
+        id: Long
+    ) {
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

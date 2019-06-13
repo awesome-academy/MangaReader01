@@ -1,8 +1,8 @@
 package com.sun.mangareader01.data.source.remote
 
-import com.sun.mangareader01.utils.METHOD_GET
-import com.sun.mangareader01.utils.build
-import com.sun.mangareader01.utils.getJsonString
+import com.sun.mangareader01.utils.Constants.METHOD_GET
+import com.sun.mangareader01.utils.Extensions.build
+import com.sun.mangareader01.utils.Extensions.getString
 import org.json.JSONException
 import java.io.IOException
 import java.io.InputStreamReader
@@ -12,7 +12,7 @@ import java.net.URL
 interface DataResponseHandler<T> {
 
     @Throws(JSONException::class)
-    fun parseToObject(jsonString: String): T
+    fun parseToObject(string: String): T
 
     @Throws(IOException::class, JSONException::class)
     fun getResponse(url: String): T? {
@@ -25,7 +25,7 @@ interface DataResponseHandler<T> {
                     throw IOException(responseCode.toString())
                 }
                 InputStreamReader(inputStream).run {
-                    responseData = parseToObject(getJsonString())
+                    responseData = parseToObject(getString())
                     close()
                 }
             }

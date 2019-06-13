@@ -1,7 +1,7 @@
 package com.sun.mangareader01.data.model
 
 import android.net.Uri
-import com.sun.mangareader01.utils.ENCODE_UTF_8
+import com.sun.mangareader01.utils.Constants.ENCODE_UTF_8
 import java.net.URLEncoder
 
 data class DataRequest(
