@@ -46,5 +46,16 @@
             app:labelVisibilityMode="unlabeled"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutContainerFragment"
             app:layout_constraintBottom_toBottomOf="parent"/>
+    <ListView
+            android:id="@+id/listSuggestions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/color_white"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginEnd="@dimen/dp_16"
+            app:layout_constraintStart_toStartOf="@id/viewSearch"
+            app:layout_constraintEnd_toEndOf="@id/viewSearch"
+            app:layout_constraintTop_toBottomOf="@id/viewSearch"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

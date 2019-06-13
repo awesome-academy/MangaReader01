@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sun.mangareader01.R
-import kotlinx.android.synthetic.main.fragment_search.view.*
+import kotlinx.android.synthetic.main.fragment_search.recyclerSearchResult
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), SearchContract.View {
 
     private lateinit var keyword: String
+    private lateinit var searchPresenter: SearchContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,9 +22,15 @@ class SearchFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.fragment_search, container, false).apply {
-            textSearchResult.text = keyword
-        }
+        inflater.inflate(R.layout.fragment_search, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        recyclerSearchResult.layoutManager = LinearLayoutManager(context)
+    }
+    override fun setPresenter(presenter: SearchContract.Presenter) {
+        searchPresenter = presenter
+    }
 
     companion object {
         private const val BUNDLE_SEARCH_KEY = "keyword"
