@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         tools:context="com.sun.mangareader01.ui.mycomics.MyComicsFragment">
     <TextView
-            android:text="@string/textTrending"
+            android:text="@string/text_trending"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"

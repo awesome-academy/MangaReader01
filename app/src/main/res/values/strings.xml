@@ -1,9 +1,9 @@
 <resources>
-    <string name="appName">Manga Reader 01</string>
-    <string name="textSearchComic">Search comics…</string>
-    <string name="textHome">Home</string>
-    <string name="textTrending">Trending</string>
-    <string name="textMyComics">My Comics</string>
+    <string name="app_name">Manga Reader 01</string>
+    <string name="text_search_comic">Search comics…</string>
+    <string name="text_home">Home</string>
+    <string name="text_trending">Trending</string>
+    <string name="text_my_comics">My Comics</string>
     <string name="text_read_now">Read now >></string>
     <string name="text_manga_cover">Manga Cover</string>
 </resources>

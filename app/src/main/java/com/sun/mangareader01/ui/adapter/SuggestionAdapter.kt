@@ -10,8 +10,8 @@ import com.sun.mangareader01.data.model.Manga
 import com.sun.mangareader01.utils.Constants.EMPTY_STRING
 import com.sun.mangareader01.utils.Extensions.setImageUrl
 import com.sun.mangareader01.utils.Helpers
-import kotlinx.android.synthetic.main.item_suggestion.view.imageMangaThumb
-import kotlinx.android.synthetic.main.item_suggestion.view.textComicTitle
+import kotlinx.android.synthetic.main.item_suggestion.view.imageSuggestionThumb
+import kotlinx.android.synthetic.main.item_suggestion.view.textSuggestionTitle
 
 class SuggestionAdapter(
     private val suggestions: MutableList<Manga>
@@ -51,8 +51,8 @@ class SuggestionAdapter(
 
     private class ViewHolder(view: View) {
 
-        val textMangaTitle: TextView by lazy { view.textComicTitle }
-        val imageMangaThumb: ImageView by lazy { view.imageMangaThumb }
+        val textMangaTitle: TextView by lazy { view.textSuggestionTitle }
+        val imageMangaThumb: ImageView by lazy { view.imageSuggestionThumb }
 
         constructor(view: View, manga: Manga, keyword: String) : this(view) {
             textMangaTitle.text = Helpers.highlightKeyword(manga.title, keyword)
