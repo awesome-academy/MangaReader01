@@ -29,7 +29,10 @@ class SuggestionAdapter(
     ): View {
         val view = convertView
             ?: View.inflate(parent.context, R.layout.item_suggestion, null)
-        view.tag = ViewHolder(view, getItem(position), keyword)
+        view.apply {
+            tag = ViewHolder(this, getItem(position), keyword, onItemClickListener)
+
+        }
         return view
     }
 
@@ -54,12 +57,18 @@ class SuggestionAdapter(
         val textMangaTitle: TextView by lazy { view.textSuggestionTitle }
         val imageMangaThumb: ImageView by lazy { view.imageSuggestionThumb }
 
-        constructor(view: View, manga: Manga, keyword: String) : this(view) {
+        constructor(
+            view: View,
+            manga: Manga,
+            keyword: String,
+            onItemClickListener: CustomAdapter.OnItemClickListener<Manga>?
+        ) : this(view) {
             textMangaTitle.text = Helpers.highlightKeyword(manga.title, keyword)
             imageMangaThumb.setImageUrl(
                 url = Helpers.buildThumbUrl(manga.slug),
                 circleCrop = true
             )
+            view.setOnClickListener { onItemClickListener?.onItemClick(manga) }
         }
     }
 }

@@ -17,13 +17,12 @@ import com.sun.mangareader01.ui.adapter.CustomAdapter
 import com.sun.mangareader01.ui.adapter.SuggestionAdapter
 import com.sun.mangareader01.ui.home.HomeFragment
 import com.sun.mangareader01.ui.mycomics.MyComicsFragment
+import com.sun.mangareader01.ui.search.SearchFragment
 import com.sun.mangareader01.ui.trending.TrendingFragment
 import com.sun.mangareader01.utils.Extensions.showToast
 import kotlinx.android.synthetic.main.activity_main.listSuggestions
 import kotlinx.android.synthetic.main.activity_main.viewNavigationBar
 import kotlinx.android.synthetic.main.activity_main.viewSearch
-
-const val DELAY_TYPING_CHANGE = 350L
 
 class MainActivity : FragmentActivity(),
     MainContract.View,
@@ -38,6 +37,7 @@ class MainActivity : FragmentActivity(),
     private val searchAdapter: CustomAdapter<Manga> by lazy {
         SuggestionAdapter(mutableListOf())
     }
+    private var isTypingSearch = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,16 +54,19 @@ class MainActivity : FragmentActivity(),
     private fun initListener() {
         viewNavigationBar.setOnNavigationItemSelectedListener(this)
         viewSearch.apply {
-            setOnClickListener { isIconified = false }
+            setOnClickListener {
+                isIconified = false
+                isTypingSearch = true
+            }
             setOnQueryTextListener(this@MainActivity)
         }
         searchAdapter.onItemClickListener = this
     }
 
     override fun showSuggestions(mangas: List<Manga>) {
-        if (mangas.any()) {
-            displaySuggestions()
+        if (mangas.any() && isTypingSearch) {
             updateSearchAdapter(mangas)
+            displaySuggestions()
         } else hideSuggestions()
     }
 
@@ -71,17 +74,28 @@ class MainActivity : FragmentActivity(),
         showToast(exception.toString())
     }
 
+    private fun getCurrentFragment() =
+        supportFragmentManager.findFragmentById(R.id.layoutContainerFragment)
+
+    private fun isDisplayingSearchFragment() =
+        getCurrentFragment() is SearchFragment
+
     override fun onQueryTextSubmit(query: String): Boolean {
+        setIsTypingSearch(false)
+        beginSearch(query)
+        hideSuggestions()
         return true
     }
 
     override fun onQueryTextChange(newText: String): Boolean {
+        setIsTypingSearch(true)
         getSuggestionsLater(newText)
         return true
     }
 
     // On suggestion item click listener
     override fun onItemClick(item: Manga) {
+        showToast(item.toString())
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -94,17 +108,19 @@ class MainActivity : FragmentActivity(),
         return true
     }
 
-    private fun addFragment(fragment: Fragment) =
+    private fun addFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .add(R.id.layoutContainerFragment, fragment)
             .addToBackStack(null)
             .commit()
+    }
 
-    private fun replaceFragment(fragment: Fragment) =
+    private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.layoutContainerFragment, fragment)
             .addToBackStack(null)
             .commit()
+    }
 
     private fun getSuggestionsLater(keyword: String) {
         searchHandler.apply {
@@ -123,11 +139,28 @@ class MainActivity : FragmentActivity(),
         }
     }
 
+    private fun setIsTypingSearch(isTyping: Boolean) {
+        isTypingSearch = isTyping
+    }
+
     private fun displaySuggestions() {
         listSuggestions.visibility = View.VISIBLE
     }
 
+    private fun beginSearch(keyword: String) {
+        if (isDisplayingSearchFragment()) {
+            (getCurrentFragment() as SearchFragment).getMangas(keyword)
+        } else addFragment(SearchFragment.newInstance(keyword).apply {
+            onMangaClickListener = this@MainActivity
+        })
+        viewSearch.clearFocus()
+    }
+
     private fun hideSuggestions() {
         listSuggestions.visibility = View.GONE
+    }
+
+    companion object {
+        const val DELAY_TYPING_CHANGE = 200L
     }
 }

@@ -23,10 +23,12 @@
             android:layout_margin="@dimen/dp_8"
             android:focusable="true"
             app:queryHint="@string/text_search_comic"
+            android:elevation="@dimen/dp_2"
             app:layout_constraintStart_toStartOf="@id/viewSearchBar"
             app:layout_constraintEnd_toEndOf="@id/viewSearchBar"
             app:layout_constraintTop_toTopOf="@id/viewSearchBar"
-            app:layout_constraintBottom_toBottomOf="@id/viewSearchBar"/>
+            app:layout_constraintBottom_toBottomOf="@id/viewSearchBar"
+            tools:ignore="UnusedAttribute"/>
     <FrameLayout
             android:id="@+id/layoutContainerFragment"
             android:layout_width="0dp"
@@ -50,12 +52,18 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
     <ListView
             android:id="@+id/listSuggestions"
+            android:visibility="invisible"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/color_white"
+            android:background="@drawable/bg_white_rounded"
             android:layout_marginStart="@dimen/dp_16"
             android:layout_marginEnd="@dimen/dp_16"
+            android:dividerHeight="0dp"
+            android:divider="@null"
+            android:elevation="@dimen/dp_2"
+            android:padding="@dimen/dp_4"
             app:layout_constraintStart_toStartOf="@id/viewSearch"
             app:layout_constraintEnd_toEndOf="@id/viewSearch"
-            app:layout_constraintTop_toBottomOf="@id/viewSearch"/>
+            app:layout_constraintTop_toBottomOf="@id/viewSearch"
+            tools:ignore="UnusedAttribute"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
