@@ -5,6 +5,8 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.sun.mangareader01.R
+import com.sun.mangareader01.data.model.Chapter
+import org.json.JSONArray
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -43,5 +45,21 @@ object Extensions {
             .apply { if (circleCrop) circleCrop() }
             .placeholder(defaultResourceId)
             .into(this)
+    }
+
+    fun ArrayList<String>.parse(jsonArray: JSONArray) = this.apply {
+        jsonArray.also {
+            for (index in 0 until it.length()) {
+                add(it.optString(index))
+            }
+        }
+    }
+
+    fun ArrayList<Chapter>.parseChapters(jsonArray: JSONArray) = this.apply {
+        jsonArray.also {
+            for (index in 0 until it.length()) {
+                add(Chapter(it.optJSONObject(index)))
+            }
+        }
     }
 }
