@@ -82,10 +82,10 @@ class MainActivity : FragmentActivity(),
         getCurrentFragment() is SearchFragment
 
     override fun onQueryTextSubmit(query: String): Boolean {
-        viewSearch.clearFocus()
         setIsTypingSearch(false)
         beginSearch(query)
         hideSuggestions()
+        viewSearch.clearFocus()
         return true
     }
 
@@ -144,6 +144,8 @@ class MainActivity : FragmentActivity(),
     }
 
     private fun openMangaDetail(manga: Manga) {
+        viewSearch.clearFocus()
+        hideSuggestions()
         replaceFragment(DetailFragment.newInstance(manga))
     }
 
