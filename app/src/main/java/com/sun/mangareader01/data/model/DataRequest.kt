@@ -1,8 +1,6 @@
 package com.sun.mangareader01.data.model
 
 import android.net.Uri
-import com.sun.mangareader01.utils.Constants.ENCODE_UTF_8
-import java.net.URLEncoder
 
 data class DataRequest(
     val scheme: String,
@@ -15,8 +13,7 @@ data class DataRequest(
         authority(authority)
         paths?.forEach { appendPath(it) }
         queryParams?.forEach {
-            val encodedValue = URLEncoder.encode(it.value.toString(), ENCODE_UTF_8)
-            appendQueryParameter(it.key, encodedValue)
+            appendQueryParameter(it.key, it.value.toString())
         }
     }.toString()
 }
