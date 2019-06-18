@@ -2,9 +2,9 @@ package com.sun.mangareader01.ui.main
 
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.BaseAdapter
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
@@ -13,7 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Manga
 import com.sun.mangareader01.data.source.repository.MangaRepository
-import com.sun.mangareader01.ui.adapter.CustomBaseAdapter
+import com.sun.mangareader01.ui.adapter.CustomAdapter
 import com.sun.mangareader01.ui.adapter.SuggestionAdapter
 import com.sun.mangareader01.ui.home.HomeFragment
 import com.sun.mangareader01.ui.mycomics.MyComicsFragment
@@ -28,26 +28,27 @@ const val DELAY_TYPING_CHANGE = 350L
 class MainActivity : FragmentActivity(),
     MainContract.View,
     SearchView.OnQueryTextListener,
-    CustomBaseAdapter.ItemClickListener<Manga>,
+    CustomAdapter.OnItemClickListener<Manga>,
     BottomNavigationView.OnNavigationItemSelectedListener {
 
-    private var presenter: MainContract.Presenter? = null
+    private val presenter: MainContract.Presenter by lazy {
+        MainPresenter(this, MangaRepository)
+    }
     private val searchHandler: Handler by lazy { Handler() }
-    private val searchAdapter: CustomBaseAdapter<Manga> by lazy {
+    private val searchAdapter: CustomAdapter<Manga> by lazy {
         SuggestionAdapter(mutableListOf())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initPresenter()
         initView()
         initListener()
     }
 
     private fun initView() {
         replaceFragment(HomeFragment())
-        listSuggestions.adapter = searchAdapter
+        listSuggestions.adapter = searchAdapter as BaseAdapter
     }
 
     private fun initListener() {
@@ -56,15 +57,7 @@ class MainActivity : FragmentActivity(),
             setOnClickListener { isIconified = false }
             setOnQueryTextListener(this@MainActivity)
         }
-        searchAdapter.setOnItemClickListener(this)
-    }
-
-    private fun initPresenter() {
-        setPresenter(MainPresenter(this))
-    }
-
-    override fun setPresenter(presenter: MainContract.Presenter) {
-        this.presenter = presenter
+        searchAdapter.onItemClickListener = this
     }
 
     override fun showSuggestions(mangas: List<Manga>) {
@@ -89,7 +82,6 @@ class MainActivity : FragmentActivity(),
 
     // On suggestion item click listener
     override fun onItemClick(item: Manga) {
-        Log.e("Main", "${item.title}")
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -119,7 +111,7 @@ class MainActivity : FragmentActivity(),
             removeCallbacksAndMessages(null)
             postDelayed(DELAY_TYPING_CHANGE) {
                 if (keyword.isBlank()) hideSuggestions()
-                else presenter?.getSuggestions(keyword)
+                else presenter.getSuggestions(keyword)
             }
         }
     }

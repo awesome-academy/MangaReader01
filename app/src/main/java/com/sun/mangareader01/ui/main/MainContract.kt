@@ -4,7 +4,6 @@ import com.sun.mangareader01.data.model.Manga
 
 interface MainContract {
     interface View {
-        fun setPresenter(presenter: Presenter)
         fun showSuggestions(mangas: List<Manga>)
         fun showError(exception: Exception)
     }

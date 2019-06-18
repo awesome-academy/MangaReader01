@@ -4,7 +4,8 @@ import com.sun.mangareader01.data.model.MangasResponse
 import com.sun.mangareader01.data.source.MangaDataSource
 import com.sun.mangareader01.data.source.local.OnLoadedDataCallback
 
-object MangaRepository : MangaDataSource.Remote {
+object MangaRepository :
+    MangaDataSource.Remote {
 
     private var remote: MangaDataSource.Remote? = null
 

@@ -5,22 +5,24 @@ import com.sun.mangareader01.data.source.local.OnLoadedDataCallback
 import com.sun.mangareader01.data.source.remote.MangaRemoteDataSource
 import com.sun.mangareader01.data.source.repository.MangaRepository
 
-const val SUGGESTIONS_LIMIT = 5
-
 class MainPresenter(
-    private val view: MainContract.View
+    private val view: MainContract.View,
+    private val repository: MangaRepository
 ) : MainContract.Presenter {
 
     init {
-        view.setPresenter(this)
-        MangaRepository.initDataSource(MangaRemoteDataSource())
+        repository.initDataSource(MangaRemoteDataSource())
     }
 
     override fun getSuggestions(query: String) =
-        MangaRepository.getMangas(query, object : OnLoadedDataCallback<MangasResponse> {
+        repository.getMangas(query, object : OnLoadedDataCallback<MangasResponse> {
             override fun onSuccessful(data: MangasResponse) =
                 view.showSuggestions(data.mangas.take(SUGGESTIONS_LIMIT))
 
             override fun onFailed(exception: Exception) = view.showError(exception)
         })
+
+    companion object {
+        const val SUGGESTIONS_LIMIT = 5
+    }
 }

@@ -18,8 +18,8 @@ class SuggestionAdapter(
 ) : BaseAdapter(),
     CustomAdapter<Manga> {
 
-    override var onItemClickListener: CustomAdapter
-    .OnItemClickListener<Manga> by lazy {  }
+    override var onItemClickListener:
+        CustomAdapter.OnItemClickListener<Manga>? = null
     private var keyword = EMPTY_STRING
 
     override fun getView(
@@ -27,16 +27,9 @@ class SuggestionAdapter(
         convertView: View?,
         parent: ViewGroup
     ): View {
-        val manga = getItem(position)
         val view = convertView
             ?: View.inflate(parent.context, R.layout.item_suggestion, null)
-        view.tag = ViewHolder(view).apply {
-            imageMangaThumb.setImageUrl(
-                url = Helpers.buildThumbUrl(manga.slug),
-                circleCrop = true
-            )
-            textMangaTitle.text = Helpers.highlightKeyword(manga.title, keyword)
-        }
+        view.tag = ViewHolder(view, getItem(position), keyword)
         return view
     }
 
@@ -57,7 +50,16 @@ class SuggestionAdapter(
     }
 
     private class ViewHolder(view: View) {
+
         val textMangaTitle: TextView by lazy { view.textComicTitle }
         val imageMangaThumb: ImageView by lazy { view.imageMangaThumb }
+
+        constructor(view: View, manga: Manga, keyword: String) : this(view) {
+            textMangaTitle.text = Helpers.highlightKeyword(manga.title, keyword)
+            imageMangaThumb.setImageUrl(
+                url = Helpers.buildThumbUrl(manga.slug),
+                circleCrop = true
+            )
+        }
     }
 }
