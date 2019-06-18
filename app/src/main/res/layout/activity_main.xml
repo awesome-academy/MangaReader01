@@ -22,7 +22,7 @@
             android:iconifiedByDefault="false"
             android:layout_margin="@dimen/dp_8"
             android:focusable="true"
-            app:queryHint="@string/textSearchComic"
+            app:queryHint="@string/text_search_comic"
             app:layout_constraintStart_toStartOf="@id/viewSearchBar"
             app:layout_constraintEnd_toEndOf="@id/viewSearchBar"
             app:layout_constraintTop_toTopOf="@id/viewSearchBar"

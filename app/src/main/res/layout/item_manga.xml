@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/dp_8">
     <ImageView
-            android:id="@+id/imageComicCover"
+            android:id="@+id/imageMangaItemCover"
             tools:src="@color/color_primary"
             android:layout_width="@dimen/dp_75"
             android:layout_height="@dimen/dp_105"
@@ -17,27 +17,18 @@
             android:contentDescription="@string/text_manga_cover"
             tools:ignore="PrivateResource"/>
     <TextView
-            android:id="@+id/textComicTitle"
-            tools:text="@string/appName"
+            android:id="@+id/textMangaItemTitle"
+            tools:text="@string/app_name"
             android:textColor="@color/color_red"
             android:textStyle="bold"
             android:textSize="@dimen/sp_20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_8"
-            app:layout_constraintTop_toTopOf="@id/imageComicCover"
-            app:layout_constraintStart_toEndOf="@id/imageComicCover"/>
-    <TextView
-            android:id="@+id/textComicDetails"
-            tools:text="@string/appName"
-            android:textColor="@color/color_black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_4"
-            app:layout_constraintStart_toStartOf="@id/textComicTitle"
-            app:layout_constraintTop_toBottomOf="@id/textComicTitle"/>
+            app:layout_constraintTop_toTopOf="@id/imageMangaItemCover"
+            app:layout_constraintStart_toEndOf="@id/imageMangaItemCover"/>
     <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonReadComic"
+            android:id="@+id/buttonMangaItemRead"
             android:text="@string/text_read_now"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

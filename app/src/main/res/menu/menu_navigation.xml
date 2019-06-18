@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/itemHomeTab"
           android:icon="@drawable/ic_home_black_24dp"
-          android:title="@string/textHome"/>
+          android:title="@string/text_home"/>
     <item android:id="@+id/itemTrendingTab"
           android:icon="@drawable/ic_trending_up_black_24dp"
-          android:title="@string/textTrending"/>
+          android:title="@string/text_trending"/>
     <item android:id="@+id/itemMyComicsTab"
           android:icon="@drawable/ic_inbox_black_24dp"
-          android:title="@string/textMyComics"/>
+          android:title="@string/text_my_comics"/>
 </menu>
