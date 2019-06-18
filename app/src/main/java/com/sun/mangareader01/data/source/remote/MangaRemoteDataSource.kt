@@ -16,8 +16,13 @@ class MangaRemoteDataSource : MangaDataSource.Remote {
         val requestUrl = DataRequest(
             scheme = Constants.SCHEME_HTTPS,
             authority = Constants.AUTHORITY_READ_COMICS_ONLINE,
-            paths = listOf(PathConstants.PATH_SEARCH)
+            paths = listOf(PathConstants.PATH_SEARCH),
+            queryParams = mapOf(KEY_QUERY to query)
         ).toUrl()
         GetResponseAsync(MangasResponseHandler(), callback).execute(requestUrl)
+    }
+
+    companion object {
+        const val KEY_QUERY = "query"
     }
 }

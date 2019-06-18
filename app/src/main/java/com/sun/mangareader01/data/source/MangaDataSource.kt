@@ -10,6 +10,4 @@ interface MangaDataSource {
             callback: OnLoadedDataCallback<MangasResponse>
         )
     }
-
-    interface Local
 }

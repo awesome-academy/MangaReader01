@@ -1,7 +1,10 @@
 package com.sun.mangareader01.utils
 
 import android.content.Context
+import android.widget.ImageView
 import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.sun.mangareader01.R
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -28,5 +31,17 @@ object Extensions {
             } while (inputLine != null)
             reader.close()
         }.toString()
+    }
+
+    fun ImageView.setImageUrl(
+        url: String,
+        circleCrop: Boolean = false,
+        defaultResourceId: Int = R.color.color_light_gray
+    ) {
+        Glide.with(context)
+            .load(url)
+            .apply { if (circleCrop) circleCrop() }
+            .placeholder(defaultResourceId)
+            .into(this)
     }
 }

@@ -6,4 +6,5 @@
     <color name="color_black">#1E1E1E</color>
     <color name="color_white">#FFFFFF</color>
     <color name="color_red">#CA1E1E</color>
+    <color name="color_light_gray">#CCCCCC</color>
 </resources>

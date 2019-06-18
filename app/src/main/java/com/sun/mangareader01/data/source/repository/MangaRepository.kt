@@ -4,17 +4,13 @@ import com.sun.mangareader01.data.model.MangasResponse
 import com.sun.mangareader01.data.source.MangaDataSource
 import com.sun.mangareader01.data.source.local.OnLoadedDataCallback
 
-object MangaRepository : MangaDataSource.Remote {
+object MangaRepository :
+    MangaDataSource.Remote {
 
     private var remote: MangaDataSource.Remote? = null
-    private var local: MangaDataSource.Local? = null
 
-    fun initDataSource(
-        remoteDataSource: MangaDataSource.Remote,
-        localDataSource: MangaDataSource.Local
-    ) {
+    fun initDataSource(remoteDataSource: MangaDataSource.Remote) {
         remote = remoteDataSource
-        local = localDataSource
     }
 
     override fun getMangas(
