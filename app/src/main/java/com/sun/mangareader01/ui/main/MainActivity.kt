@@ -81,6 +81,7 @@ class MainActivity : FragmentActivity(),
         getCurrentFragment() is SearchFragment
 
     override fun onQueryTextSubmit(query: String): Boolean {
+        viewSearch.clearFocus()
         setIsTypingSearch(false)
         beginSearch(query)
         hideSuggestions()
@@ -95,6 +96,7 @@ class MainActivity : FragmentActivity(),
 
     // On suggestion item click listener
     override fun onItemClick(item: Manga) {
+        presenter.getMangaDetail(item)
         showToast(item.toString())
     }
 

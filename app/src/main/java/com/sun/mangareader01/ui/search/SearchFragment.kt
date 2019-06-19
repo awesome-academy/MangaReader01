@@ -60,9 +60,9 @@ class SearchFragment : Fragment(),
     }
 
     override fun showMangas(mangas: List<Manga>) {
-        hideSearchingBar()
         mangaAdapter.updateData(mangas)
-        recyclerSearchResult.smoothScrollToPosition(0)
+        hideSearchingBar()
+        recyclerSearchResult.scrollToPosition(0)
     }
 
     override fun showError(exception: Exception) {
