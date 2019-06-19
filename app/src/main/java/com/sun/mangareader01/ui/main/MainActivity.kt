@@ -34,16 +34,21 @@ class MainActivity : FragmentActivity(),
     BottomNavigationView.OnNavigationItemSelectedListener,
     OnItemClickListener {
 
+    init {
+        MangaRepository.initDataSource(MangaRemoteDataSource())
+    }
+
     private val presenter: MainContract.Presenter by lazy {
-        MainPresenter(this, MangaRepository.apply {
-            initDataSource(MangaRemoteDataSource())
-        })
+        MainPresenter(this, MangaRepository)
     }
     private val searchHandler: Handler by lazy { Handler() }
     private val searchAdapter: CustomAdapter<Manga> by lazy {
         SuggestionAdapter(mutableListOf())
     }
     private var isTypingSearch = false
+    private val trendingFragment: TrendingFragment by lazy {
+        TrendingFragment(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,10 +108,10 @@ class MainActivity : FragmentActivity(),
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.itemHomeTab -> HomeFragment()
-            R.id.itemTrendingTab -> TrendingFragment()
+            R.id.itemTrendingTab -> trendingFragment
             R.id.itemMyComicsTab -> MyComicsFragment()
             else -> null
-        }?.let { replaceFragment(it) }
+        }?.also { replaceFragment(it) }
         return true
     }
 

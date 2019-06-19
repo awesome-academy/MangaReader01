@@ -10,12 +10,13 @@ class DetailPresenter(
     private val repository: MangaRepository
 ) : DetailContract.Presenter {
 
-    override fun getDetail(manga: Manga) {
-        repository.getMangaDetail(manga, object : OnLoadedDataCallback<MangaDetail> {
-            override fun onSuccessful(data: MangaDetail) = view.showMangaDetail(data)
+    override fun getDetail(manga: Manga) = repository.getMangaDetail(
+        manga,
+        object : OnLoadedDataCallback<MangaDetail> {
+            override fun onSuccessful(data: MangaDetail) =
+                view.showMangaDetail(data)
 
-            override fun onFailed(exception: Exception) = view.showError(exception)
-
+            override fun onFailed(exception: Exception) =
+                view.showError(exception)
         })
-    }
 }
