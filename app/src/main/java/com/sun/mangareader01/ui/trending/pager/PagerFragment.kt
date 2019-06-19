@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.sun.mangareader01.R
@@ -47,7 +47,7 @@ abstract class PagerFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         displayLoadingBar()
         recyclerMangas.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = GridLayoutManager(context, 3)
             adapter = mangaAdapter as RecyclerView.Adapter<*>
         }
         mangaAdapter.onItemClickListener = onItemClickListener

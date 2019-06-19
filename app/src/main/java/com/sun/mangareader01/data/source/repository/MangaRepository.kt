@@ -1,6 +1,10 @@
 package com.sun.mangareader01.data.source.repository
 
 import com.sun.mangareader01.data.model.*
+import com.sun.mangareader01.data.model.CategoriesResponse
+import com.sun.mangareader01.data.model.Manga
+import com.sun.mangareader01.data.model.MangaDetail
+import com.sun.mangareader01.data.model.MangasResponse
 import com.sun.mangareader01.data.source.MangaDataSource
 import com.sun.mangareader01.data.source.local.OnLoadedDataCallback
 
@@ -48,6 +52,10 @@ object MangaRepository : MangaDataSource.Remote {
         )
     }
 
+    override fun getRandomMangaDetail(callback: OnLoadedDataCallback<MangaDetail>) {
+        remote?.getRandomMangaDetail(callback)
+    }
+
     override fun getHotMangas(callback: OnLoadedDataCallback<MangasResponse>) {
         remote?.getHotMangas(callback)
     }
@@ -65,5 +73,9 @@ object MangaRepository : MangaDataSource.Remote {
         callback: OnLoadedDataCallback<PagesResponse>
     ) {
         remote?.getPages(chapter, callback)
+    }
+
+    override fun getCategories(callback: OnLoadedDataCallback<CategoriesResponse>) {
+        remote?.getCategories(callback)
     }
 }

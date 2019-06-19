@@ -11,11 +11,42 @@ import org.jsoup.nodes.Element
 
 class ApiHelpers {
 
+    class ApiCategories(document: Document) : ApiAdapter<CategoriesResponse> {
+
+        private val listCategoryElement = document.selectFirst(LIST_CATEGORY)
+
+        override fun getJsonObject() = JSONObject().apply {
+            put(JSON_KEY_CATEGORIES, getCategories())
+        }
+
+        private fun getCategories() = JSONArray().apply {
+            listCategoryElement.select(CATEGORY).forEach {
+                put(getCategory(it))
+            }
+        }
+
+        private fun getCategory(element: Element) = JSONObject().apply {
+            element.also {
+                put(JSON_KEY_NAME, it.text())
+                put(JSON_KEY_ID, getCategoryId(it.attr(ATTR_HREF).trim()))
+            }
+        }
+
+        private fun getCategoryId(url: String) =
+            url.substringAfterLast('=').toInt()
+
+        companion object {
+            const val LIST_CATEGORY = ".list-category"
+            const val CATEGORY = "a.category"
+        }
+    }
+
+
     class ApiHotMangas(document: Document) : ApiAdapter<MangasResponse> {
 
         private val body = document.body()
 
-        override fun getJsonObject(): JSONObject = JSONObject().apply {
+        override fun getJsonObject() = JSONObject().apply {
             put(JSON_KEY_SUGGESTION, getMangas())
         }
 

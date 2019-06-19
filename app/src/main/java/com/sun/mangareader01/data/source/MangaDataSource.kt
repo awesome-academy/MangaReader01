@@ -1,6 +1,10 @@
 package com.sun.mangareader01.data.source
 
 import com.sun.mangareader01.data.model.*
+import com.sun.mangareader01.data.model.CategoriesResponse
+import com.sun.mangareader01.data.model.Manga
+import com.sun.mangareader01.data.model.MangaDetail
+import com.sun.mangareader01.data.model.MangasResponse
 import com.sun.mangareader01.data.source.local.OnLoadedDataCallback
 import com.sun.mangareader01.utils.Constants.EMPTY_STRING
 
@@ -15,6 +19,8 @@ interface MangaDataSource {
             manga: Manga,
             callback: OnLoadedDataCallback<MangaDetail>
         )
+
+        fun getRandomMangaDetail(callback: OnLoadedDataCallback<MangaDetail>)
 
         fun getHotMangas(callback: OnLoadedDataCallback<MangasResponse>)
 
@@ -40,6 +46,10 @@ interface MangaDataSource {
         fun getPages(
             chapter: Chapter,
             callback: OnLoadedDataCallback<PagesResponse>
+        )
+
+        fun getCategories(
+            callback: OnLoadedDataCallback<CategoriesResponse>
         )
 
         companion object {
