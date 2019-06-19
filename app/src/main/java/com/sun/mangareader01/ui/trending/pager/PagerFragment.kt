@@ -13,14 +13,17 @@ import com.sun.mangareader01.data.model.Manga
 import com.sun.mangareader01.ui.adapter.CustomAdapter
 import com.sun.mangareader01.ui.adapter.MangaAdapter
 import com.sun.mangareader01.ui.listener.OnItemClickListener
+import com.sun.mangareader01.utils.Extensions.showToast
 import kotlinx.android.synthetic.main.fragment_trending_pager.layoutRefresh
 import kotlinx.android.synthetic.main.fragment_trending_pager.recyclerMangas
 
 abstract class PagerFragment : Fragment(),
+    PagerContract.View,
     SwipeRefreshLayout.OnRefreshListener {
 
     abstract val title: String?
     abstract val icon: Int?
+    abstract val presenter: PagerContract.Presenter
     private var onItemClickListener: OnItemClickListener? = null
     private val mangaAdapter: CustomAdapter<Manga> by lazy {
         MangaAdapter(mutableListOf())
@@ -49,15 +52,19 @@ abstract class PagerFragment : Fragment(),
         }
         mangaAdapter.onItemClickListener = onItemClickListener
         layoutRefresh.setOnRefreshListener(this)
+        presenter.getMangas()
     }
 
-    private fun showMangas(mangas: List<Manga>) {
+    override fun showMangas(mangas: List<Manga>) {
         mangaAdapter.updateData(mangas)
         hideLoadingBar()
     }
 
-    override fun onRefresh() {
+    override fun showError(exception: Exception) {
+        context?.showToast(exception.toString())
     }
+
+    override fun onRefresh() = presenter.getMangas()
 
     private fun displayLoadingBar() {
         layoutRefresh?.isRefreshing = true

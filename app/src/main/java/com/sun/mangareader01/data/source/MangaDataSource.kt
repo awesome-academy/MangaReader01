@@ -4,6 +4,7 @@ import com.sun.mangareader01.data.model.Manga
 import com.sun.mangareader01.data.model.MangaDetail
 import com.sun.mangareader01.data.model.MangasResponse
 import com.sun.mangareader01.data.source.local.OnLoadedDataCallback
+import com.sun.mangareader01.utils.Constants.EMPTY_STRING
 
 interface MangaDataSource {
     interface Remote {
@@ -16,5 +17,32 @@ interface MangaDataSource {
             manga: Manga,
             callback: OnLoadedDataCallback<MangaDetail>
         )
+
+        fun getHotMangas(callback: OnLoadedDataCallback<MangasResponse>)
+
+        fun getFilteredMangas(
+            page: Int = 1,
+            category: String = EMPTY_STRING,
+            alpha: String = EMPTY_STRING,
+            sortBy: String = SORT_BY_VIEWS,
+            asc: Boolean = true,
+            author: String = EMPTY_STRING,
+            tag: String = EMPTY_STRING,
+            callback: OnLoadedDataCallback<MangasResponse>
+        )
+
+        fun getMostViewedMangas(
+            callback: OnLoadedDataCallback<MangasResponse>
+        )
+
+        fun getLastReleasedMangas(
+            callback: OnLoadedDataCallback<MangasResponse>
+        )
+
+        companion object {
+            const val SORT_BY_VIEWS = "views"
+            const val SORT_BY_LAST_RELEASE = "last_release"
+            const val SORT_BY_NAME = "name"
+        }
     }
 }
