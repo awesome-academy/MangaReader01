@@ -14,12 +14,14 @@ class MainPresenter(
         repository.initDataSource(MangaRemoteDataSource())
     }
 
-    override fun getSuggestions(query: String) =
-        repository.getMangas(query, object : OnLoadedDataCallback<MangasResponse> {
+    override fun getSuggestions(query: String) = repository.getMangas(
+        query,
+        object : OnLoadedDataCallback<MangasResponse> {
             override fun onSuccessful(data: MangasResponse) =
                 view.showSuggestions(data.mangas.take(SUGGESTIONS_LIMIT))
 
-            override fun onFailed(exception: Exception) = view.showError(exception)
+            override fun onFailed(exception: Exception) =
+                view.showError(exception)
         })
 
     companion object {
