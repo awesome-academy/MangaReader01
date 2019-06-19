@@ -6,12 +6,15 @@ import android.text.SpannableString
 import android.text.style.BackgroundColorSpan
 import com.sun.mangareader01.data.model.DataRequest
 import com.sun.mangareader01.utils.Constants.AUTHORITY_READ_COMICS_ONLINE
+import com.sun.mangareader01.utils.Constants.EMPTY_STRING
 import com.sun.mangareader01.utils.Constants.SCHEME_HTTPS
 import com.sun.mangareader01.utils.PathConstants.PATH_COVER
 import com.sun.mangareader01.utils.PathConstants.PATH_COVER_FILE_NAME
 import com.sun.mangareader01.utils.PathConstants.PATH_MANGA
 import com.sun.mangareader01.utils.PathConstants.PATH_THUMB_FILE_NAME
 import com.sun.mangareader01.utils.PathConstants.PATH_UPLOADS
+import java.text.Normalizer
+
 
 object Helpers {
     fun buildCoverUrl(slug: String) = DataRequest(
@@ -45,4 +48,11 @@ object Helpers {
             )
         }
     }
+
+    fun slugify(word: String, replacement: String = "-") = Normalizer
+        .normalize(word, Normalizer.Form.NFD)
+        .replace("[^\\p{ASCII}]".toRegex(), EMPTY_STRING)
+        .replace("[^a-zA-Z0-9\\s]+".toRegex(), EMPTY_STRING).trim()
+        .replace("\\s+".toRegex(), replacement)
+        .toLowerCase()
 }

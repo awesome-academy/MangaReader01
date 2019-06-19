@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.sun.mangareader01.ui.home.HomeFragment">
-    <TextView
-            android:text="@string/text_home"
-            android:layout_width="wrap_content"
+    <include
+            android:id="@+id/layoutRandomManga"
+            layout="@layout/item_manga"/>
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerCategories"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:nestedScrollingEnabled="false"
+            android:padding="@dimen/dp_4"
+            tools:listitem="@layout/item_category"
+            tools:ignore="UnusedAttribute"/>
+</LinearLayout>

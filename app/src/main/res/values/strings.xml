@@ -11,8 +11,5 @@
     <string name="text_rating">(%.2f/5)</string>
     <string name="text_chapters">Chapters</string>
     <string name="text_load_more">Load more…</string>
-    <string name="title_most_viewed">Most viewed</string>
-    <string name="title_hot">Hot updates</string>
-    <string name="title_last_release">Last release</string>
     <string name="text_current_page_number">Page %d of %d</string>
 </resources>

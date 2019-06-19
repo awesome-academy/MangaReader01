@@ -50,7 +50,9 @@ class MainActivity : FragmentActivity(),
     private val trendingFragment: TrendingFragment by lazy {
         TrendingFragment.newInstance(onItemClickListener)
     }
-
+    private val homeFragment: HomeFragment by lazy {
+        HomeFragment.newInstance(onItemClickListener)
+    }
     private val onItemClickListener = object : OnItemClickListener {
         override fun onMangaClick(manga: Manga?) {
             manga?.let { openMangaDetail(it) }
@@ -82,7 +84,7 @@ class MainActivity : FragmentActivity(),
     }
 
     private fun initView() {
-        replaceFragment(HomeFragment())
+        replaceFragment(homeFragment)
         listSuggestions.adapter = searchAdapter as BaseAdapter
     }
 
@@ -131,7 +133,7 @@ class MainActivity : FragmentActivity(),
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.itemHomeTab -> HomeFragment()
+            R.id.itemHomeTab -> homeFragment
             R.id.itemTrendingTab -> trendingFragment
             R.id.itemMyComicsTab -> MyComicsFragment()
             else -> null

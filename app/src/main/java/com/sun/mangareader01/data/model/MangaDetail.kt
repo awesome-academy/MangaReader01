@@ -2,6 +2,7 @@ package com.sun.mangareader01.data.model
 
 import com.sun.mangareader01.utils.Extensions.parse
 import com.sun.mangareader01.utils.Extensions.parseChapters
+import com.sun.mangareader01.utils.Helpers.slugify
 import org.json.JSONObject
 
 const val JSON_KEY_AUTHOR = "author"
@@ -29,5 +30,10 @@ data class MangaDetail(
         chapters = ArrayList<Chapter>().parseChapters(
             jsonObject.optJSONArray(JSON_KEY_CHAPTERS)
         )
+    )
+
+    fun getManga() = Manga(
+        title = title,
+        slug = slugify(title)
     )
 }
