@@ -14,7 +14,8 @@
             android:elevation="@dimen/dp_2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UnusedAttribute"/>
     <androidx.appcompat.widget.SearchView
             android:id="@+id/viewSearch"
             android:layout_width="0dp"
@@ -24,7 +25,7 @@
             android:layout_margin="@dimen/dp_8"
             android:focusable="true"
             app:queryHint="@string/text_search_comic"
-            android:elevation="@dimen/dp_2"
+            android:elevation="@dimen/dp_4"
             app:layout_constraintStart_toStartOf="@id/viewSearchBar"
             app:layout_constraintEnd_toEndOf="@id/viewSearchBar"
             app:layout_constraintTop_toTopOf="@id/viewSearchBar"

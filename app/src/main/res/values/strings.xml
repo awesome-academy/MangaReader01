@@ -9,4 +9,6 @@
     <string name="string_various_artist">Various Artist</string>
     <string name="text_summary">Summary</string>
     <string name="text_rating">(%.2f/5)</string>
+    <string name="text_chapters">Chapters</string>
+    <string name="text_load_more">Load more…</string>
 </resources>
