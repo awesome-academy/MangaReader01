@@ -10,7 +10,7 @@ const val JSON_KEY_SUMMARY = "summary"
 const val JSON_KEY_RATING = "rating"
 const val JSON_KEY_CHAPTERS = "chapters"
 
-data class MangaDetailResponse(
+data class MangaDetail(
     val title: String,
     val author: String,
     val summary: String,
