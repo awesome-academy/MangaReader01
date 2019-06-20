@@ -10,8 +10,8 @@ object MangaRepository : MangaDataSource.Remote {
 
     private var remote: MangaDataSource.Remote? = null
 
-    fun initDataSource(dataSource: MangaDataSource.Remote) {
-        remote = dataSource
+    fun initDataSource(remoteDataSource: MangaDataSource.Remote) {
+        remote = remoteDataSource
     }
 
     override fun getMangas(

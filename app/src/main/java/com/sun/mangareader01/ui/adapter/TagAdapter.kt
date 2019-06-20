@@ -6,26 +6,51 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sun.mangareader01.R
+import com.sun.mangareader01.ui.listener.ClickListener
 import kotlinx.android.synthetic.main.item_tag.view.textTag
 
 class TagAdapter(
-    private val tags: List<String>
-) : RecyclerView.Adapter<TagAdapter.ViewHolder>() {
+    private val tags: MutableList<String>
+) : RecyclerView.Adapter<TagAdapter.ViewHolder>(),
+    CustomAdapter<String> {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-        ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_tag, parent, false))
+    override var onItemClickListener: ClickListener? = null
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_tag, parent, false)
+        return ViewHolder(view, onItemClickListener)
+    }
+
+    override fun updateData(data: List<String>) {
+        tags.clear()
+        tags.addAll(data)
+    }
+
+    override fun <T> updateValue(value: T) {
+    }
 
     override fun getItemCount() = tags.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bindData(tags[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+        holder.bindData(tags[position])
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val textTag: TextView = itemView.textTag
+    class ViewHolder(view: View, clickListener: ClickListener?) :
+        RecyclerView.ViewHolder(view) {
+
+        private var item: String? = null
+        private val textTag: TextView by lazy { view.textTag }
+
+        init {
+            view.setOnClickListener { clickListener?.onClick(item) }
+        }
 
         fun bindData(tag: String) {
+            item = tag
             textTag.text = tag
-            itemView.setOnClickListener {
-            }
         }
     }
 }

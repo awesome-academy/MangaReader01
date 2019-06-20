@@ -12,24 +12,28 @@ import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Chapter
 import com.sun.mangareader01.data.model.Manga
 import com.sun.mangareader01.data.model.MangaDetail
-import com.sun.mangareader01.data.source.remote.MangaRemoteDataSource
 import com.sun.mangareader01.data.source.repository.MangaRepository
 import com.sun.mangareader01.ui.adapter.ChapterAdapter
 import com.sun.mangareader01.ui.adapter.TagAdapter
+import com.sun.mangareader01.ui.listener.ClickListener
+import com.sun.mangareader01.utils.Constants.EMPTY_STRING
 import com.sun.mangareader01.utils.Extensions.setImageUrl
 import com.sun.mangareader01.utils.Extensions.showToast
 import com.sun.mangareader01.utils.Helpers.buildCoverUrl
 import kotlinx.android.synthetic.main.fragment_detail.*
 
-class DetailFragment : Fragment(), DetailContract.View {
+class DetailFragment : Fragment(),
+    DetailContract.View {
 
     private val presenter: DetailContract.Presenter by lazy {
         DetailPresenter(this, MangaRepository)
     }
-    private lateinit var manga: Manga
+    private var manga: Manga = Manga(EMPTY_STRING, EMPTY_STRING)
+    private val tagAdapter: TagAdapter by lazy { TagAdapter(mutableListOf()) }
     private val chapterAdapter: ChapterAdapter by lazy {
         ChapterAdapter(mutableListOf())
     }
+    var clickListener: ClickListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +53,8 @@ class DetailFragment : Fragment(), DetailContract.View {
         super.onViewCreated(view, savedInstanceState)
         showExistDetails()
         displayLoading()
+        tagAdapter.onItemClickListener = clickListener
+        chapterAdapter.onItemClickListener = clickListener
         presenter.getDetail(manga)
     }
 
@@ -79,27 +85,34 @@ class DetailFragment : Fragment(), DetailContract.View {
     private fun showTags(tags: List<String>) {
         recyclerTags.apply {
             layoutManager = FlexboxLayoutManager(context, ROW)
-            adapter = TagAdapter(tags)
+            adapter = tagAdapter.also { it.updateData(tags) }
         }
     }
 
-    private fun showChapters(chapters: List<Chapter>) {
+    private fun showChapters(allChapters: List<Chapter>) {
         recyclerChapters.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = chapterAdapter
         }
-        chapterAdapter.updateData(chapters.take(LIMIT_CHAPTER_SHOW))
-        showLoadMore(chapters)
+        showMoreChapters(allChapters)
+        textLoadMore.setOnClickListener {
+            showMoreChapters(allChapters)
+        }
     }
 
-    private fun showLoadMore(chapters: List<Chapter>) {
-        if (chapters.size <= chapterAdapter.itemCount) hideLoadMore()
-        else textLoadMore.setOnClickListener {
-            chapterAdapter.updateData(
-                chapters.take(chapterAdapter.itemCount + LIMIT_CHAPTER_SHOW)
-            )
-            if (chapterAdapter.itemCount == chapters.size) hideLoadMore()
-        }
+    private fun showMoreChapters(allChapters: List<Chapter>) {
+        val newNumberChapters = chapterAdapter.itemCount + LIMIT_CHAPTER_SHOW
+        chapterAdapter.updateData(allChapters.take(newNumberChapters))
+        if (hasMoreChapters(allChapters)) showLoadMore()
+        else hideLoadMore()
+    }
+
+    private fun hasMoreChapters(chapters: List<Chapter>) =
+        chapterAdapter.itemCount < chapters.size
+
+    private fun showLoadMore() {
+        imageLoadMoreIcon.visibility = View.VISIBLE
+        textLoadMore.visibility = View.VISIBLE
     }
 
     private fun hideLoadMore() {
@@ -122,10 +135,12 @@ class DetailFragment : Fragment(), DetailContract.View {
         private const val LIMIT_CHAPTER_SHOW = 5
 
         @JvmStatic
-        fun newInstance(manga: Manga?) = DetailFragment().apply {
-            arguments = Bundle().apply {
-                putParcelable(BUNDLE_MANGA_KEY, manga)
+        fun newInstance(manga: Manga?, clickListener: ClickListener) =
+            DetailFragment().apply {
+                this.clickListener = clickListener
+                arguments = Bundle().apply {
+                    putParcelable(BUNDLE_MANGA_KEY, manga)
+                }
             }
-        }
     }
 }

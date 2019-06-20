@@ -8,25 +8,40 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Chapter
+import com.sun.mangareader01.ui.listener.ClickListener
 import kotlinx.android.synthetic.main.item_chapter.view.textChapterTitle
 import kotlinx.android.synthetic.main.item_chapter.view.textUploadDate
 
 class ChapterAdapter(
     private val chapters: MutableList<Chapter>
-) : RecyclerView.Adapter<ChapterAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<ChapterAdapter.ViewHolder>(),
+    CustomAdapter<Chapter> {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-        ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_chapter, parent, false))
+    override var onItemClickListener: ClickListener? = null
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        ViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.item_chapter,
+                parent,
+                false
+            ), onItemClickListener
+        )
 
     override fun getItemCount() = chapters.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
         holder.bindData(chapters[position])
 
-    fun updateData(newChapters: List<Chapter>) {
-        val diffUtil = DiffUtil.calculateDiff(ChaptersUpdateCallback(chapters, newChapters))
-        loadNewChapters(newChapters)
+    override fun updateData(data: List<Chapter>) {
+        val diffUtil = DiffUtil.calculateDiff(
+            ChaptersUpdateCallback(chapters, data)
+        )
+        loadNewChapters(data)
         diffUtil.dispatchUpdatesTo(this)
+    }
+
+    override fun <T> updateValue(value: T) {
     }
 
     private fun loadNewChapters(newChapters: List<Chapter>) {
@@ -34,16 +49,20 @@ class ChapterAdapter(
         chapters.addAll(newChapters)
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(view: View, clickListener: ClickListener?) :
+        RecyclerView.ViewHolder(view) {
 
-        private val textChapterTitle: TextView  by lazy { itemView.textChapterTitle }
-        private val textUploadDate: TextView  by lazy { itemView.textUploadDate }
+        private var item: Chapter? = null
+        private val textChapterTitle: TextView  by lazy { view.textChapterTitle }
+        private val textUploadDate: TextView  by lazy { view.textUploadDate }
+
+        init {
+            view.setOnClickListener { clickListener?.onClick(item) }
+        }
 
         fun bindData(chapter: Chapter) {
             textChapterTitle.text = chapter.title
             textUploadDate.text = chapter.uploadDate
-            itemView.setOnClickListener {
-            }
         }
     }
 
@@ -56,10 +75,12 @@ class ChapterAdapter(
 
         override fun getNewListSize() = newChapters.size
 
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-            oldChapters[oldItemPosition].url == newChapters[newItemPosition].url
+        override fun areItemsTheSame(oldPosition: Int, newPosition: Int) =
+            oldChapters[oldPosition].url == newChapters[newPosition].url
 
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-            areItemsTheSame(oldItemPosition, newItemPosition)
+        override fun areContentsTheSame(
+            oldPosition: Int,
+            newPosition: Int
+        ) = areItemsTheSame(oldPosition, newPosition)
     }
 }

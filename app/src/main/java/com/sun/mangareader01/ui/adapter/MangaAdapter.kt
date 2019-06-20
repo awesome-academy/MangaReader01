@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Manga
+import com.sun.mangareader01.ui.listener.ClickListener
 import com.sun.mangareader01.utils.Extensions.setImageUrl
 import com.sun.mangareader01.utils.Helpers
 import kotlinx.android.synthetic.main.item_manga.view.imageMangaItemCover
@@ -19,17 +20,23 @@ class MangaAdapter(
 ) : RecyclerView.Adapter<MangaAdapter.ViewHolder>(),
     CustomAdapter<Manga> {
 
-    override var onItemClickListener: CustomAdapter.OnItemClickListener<Manga>? =
-        null
+    override var onItemClickListener: ClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_manga, parent, false)
+                .inflate(R.layout.item_manga, parent, false),
+            onItemClickListener
         )
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-        holder.bindData(mangas[position], onItemClickListener)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.apply {
+            itemView.setOnClickListener {
+                onItemClickListener?.onClick(mangas[position])
+            }
+            bindData(mangas[position])
+        }
+    }
 
     override fun getItemCount() = mangas.size
 
@@ -48,7 +55,10 @@ class MangaAdapter(
         mangas.addAll(newMangas)
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View, clickListener: ClickListener?) :
+        RecyclerView.ViewHolder(view) {
+
+        private var item: Manga? = null
         private val textSuggestionTitle: TextView by lazy {
             view.textMangaItemTitle
         }
@@ -56,15 +66,14 @@ class MangaAdapter(
             view.imageMangaItemCover
         }
 
-        fun bindData(
-            manga: Manga,
-            onItemClickListener: CustomAdapter.OnItemClickListener<Manga>?
-        ) {
+        init {
+            view.setOnClickListener { clickListener?.onClick(item) }
+        }
+
+        fun bindData(manga: Manga) {
+            item = manga
             textSuggestionTitle.text = manga.title
             imageMangaItemCover.setImageUrl(Helpers.buildCoverUrl(manga.slug))
-            itemView.setOnClickListener {
-                onItemClickListener?.onItemClick(manga)
-            }
         }
     }
 
