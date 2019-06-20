@@ -78,9 +78,7 @@ class ChapterAdapter(
         override fun areItemsTheSame(oldPosition: Int, newPosition: Int) =
             oldChapters[oldPosition].url == newChapters[newPosition].url
 
-        override fun areContentsTheSame(
-            oldPosition: Int,
-            newPosition: Int
-        ) = areItemsTheSame(oldPosition, newPosition)
+        override fun areContentsTheSame(oldPosition: Int, newPosition: Int) =
+            areItemsTheSame(oldPosition, newPosition)
     }
 }

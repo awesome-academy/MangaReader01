@@ -1,8 +1,6 @@
 package com.sun.mangareader01.data.source.repository
 
-import com.sun.mangareader01.data.model.Manga
-import com.sun.mangareader01.data.model.MangaDetail
-import com.sun.mangareader01.data.model.MangasResponse
+import com.sun.mangareader01.data.model.*
 import com.sun.mangareader01.data.source.MangaDataSource
 import com.sun.mangareader01.data.source.local.OnLoadedDataCallback
 
@@ -60,5 +58,12 @@ object MangaRepository : MangaDataSource.Remote {
 
     override fun getMostViewedMangas(callback: OnLoadedDataCallback<MangasResponse>) {
         remote?.getMostViewedMangas(callback)
+    }
+
+    override fun getPages(
+        chapter: Chapter,
+        callback: OnLoadedDataCallback<PagesResponse>
+    ) {
+        remote?.getPages(chapter, callback)
     }
 }

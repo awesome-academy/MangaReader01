@@ -125,4 +125,22 @@ class ApiHelpers {
             const val MANGA_UPLOAD_DATE = ".date-chapter-title-rtl"
         }
     }
+
+    class ApiPages(document: Document) : ApiAdapter<PagesResponse> {
+
+        private val body = document.body()
+
+        override fun getJsonObject() = JSONObject().apply {
+            put(JSON_KEY_PAGES, getPages())
+        }
+
+        private fun getPages() = JSONArray().apply {
+            body.select(PAGE_URL).forEach { put(it.attr(ATTR_DATA_SRC)) }
+        }
+
+        companion object CssQuery {
+            const val PAGE_URL = "#all img"
+            const val ATTR_DATA_SRC = "data-src"
+        }
+    }
 }

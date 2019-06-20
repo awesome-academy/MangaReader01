@@ -1,9 +1,6 @@
 package com.sun.mangareader01.data.source.remote
 
-import com.sun.mangareader01.data.model.DataRequest
-import com.sun.mangareader01.data.model.Manga
-import com.sun.mangareader01.data.model.MangaDetail
-import com.sun.mangareader01.data.model.MangasResponse
+import com.sun.mangareader01.data.model.*
 import com.sun.mangareader01.data.source.MangaDataSource
 import com.sun.mangareader01.data.source.MangaDataSource.Remote.Companion.SORT_BY_LAST_RELEASE
 import com.sun.mangareader01.data.source.local.OnLoadedDataCallback
@@ -93,6 +90,13 @@ class MangaRemoteDataSource : MangaDataSource.Remote {
         asc = false,
         callback = callback
     )
+
+    override fun getPages(
+        chapter: Chapter,
+        callback: OnLoadedDataCallback<PagesResponse>
+    ) {
+        GetResponseAsync(PagesResponseHandler(), callback).execute(chapter.url)
+    }
 
     companion object {
         const val KEY_QUERY = "query"
