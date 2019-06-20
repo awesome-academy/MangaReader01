@@ -8,4 +8,5 @@
     <color name="color_red">#CA1E1E</color>
     <color name="color_light_gray">#CCCCCC</color>
     <color name="color_green">#34C759</color>
+    <color name="black_overlay">#aa000000</color>
 </resources>
