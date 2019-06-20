@@ -2,7 +2,7 @@ package com.sun.mangareader01.data.source.remote
 
 import com.sun.mangareader01.data.model.DataRequest
 import com.sun.mangareader01.data.model.Manga
-import com.sun.mangareader01.data.model.MangaDetailResponse
+import com.sun.mangareader01.data.model.MangaDetail
 import com.sun.mangareader01.data.model.MangasResponse
 import com.sun.mangareader01.data.source.MangaDataSource
 import com.sun.mangareader01.data.source.local.OnLoadedDataCallback
@@ -28,14 +28,14 @@ class MangaRemoteDataSource : MangaDataSource.Remote {
 
     override fun getMangaDetail(
         manga: Manga,
-        callback: OnLoadedDataCallback<MangaDetailResponse>
+        callback: OnLoadedDataCallback<MangaDetail>
     ) {
         val requestUrl = DataRequest(
             scheme = SCHEME_HTTPS,
             authority = AUTHORITY_READ_COMICS_ONLINE,
             paths = listOf(PATH_COMIC, manga.slug)
         ).toUrl()
-        GetResponseAsync(MangaDetailResponseHandler(), callback).execute(requestUrl)
+        GetResponseAsync(MangaDetailHandler(), callback).execute(requestUrl)
     }
 
     companion object {

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Manga
-import com.sun.mangareader01.data.model.MangaDetailResponse
+import com.sun.mangareader01.data.model.MangaDetail
 import com.sun.mangareader01.data.source.repository.MangaRepository
 import com.sun.mangareader01.utils.Extensions.setImageUrl
 import com.sun.mangareader01.utils.Extensions.showToast
@@ -35,22 +35,13 @@ class DetailFragment : Fragment(), DetailContract.View {
     ): View? =
         inflater.inflate(R.layout.fragment_detail, container, false)
 
-    override fun onResume() {
-        super.onResume()
-        presenter.getDetail(manga)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         displayLoading()
-    }
-
-    override fun onStart() {
-        super.onStart()
         presenter.getDetail(manga)
     }
 
-    override fun showDetail(data: MangaDetailResponse) {
+    override fun showMangaDetail(data: MangaDetail) {
         hideLoading()
         textMangaTitle.text = data.title
         imageBackComicCover.setImageUrl(buildCoverUrl(manga.slug))

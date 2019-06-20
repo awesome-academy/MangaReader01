@@ -1,11 +1,11 @@
 package com.sun.mangareader01.ui.detail
 
 import com.sun.mangareader01.data.model.Manga
-import com.sun.mangareader01.data.model.MangaDetailResponse
+import com.sun.mangareader01.data.model.MangaDetail
 
 interface DetailContract {
     interface View {
-        fun showDetail(data: MangaDetailResponse)
+        fun showMangaDetail(data: MangaDetail)
         fun showError(exception: Exception)
     }
 

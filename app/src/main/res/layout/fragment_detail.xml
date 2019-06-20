@@ -65,7 +65,6 @@
                 tools:ignore="UnusedAttribute"/>
         <TextView
                 android:id="@+id/textRating"
-                tools:text="(4.3)"
                 android:textColor="@color/color_red"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

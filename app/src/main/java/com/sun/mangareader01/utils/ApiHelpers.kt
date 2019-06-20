@@ -8,7 +8,7 @@ import org.jsoup.nodes.Element
 
 class ApiHelpers {
 
-    class ApiMangaDetail(document: Document) : ApiAdapter<MangaDetailResponse> {
+    class ApiMangaDetail(document: Document) : ApiAdapter<MangaDetail> {
 
         private val body = document.body()
 

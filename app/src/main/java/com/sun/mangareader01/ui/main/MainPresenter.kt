@@ -1,7 +1,7 @@
 package com.sun.mangareader01.ui.main
 
 import com.sun.mangareader01.data.model.Manga
-import com.sun.mangareader01.data.model.MangaDetailResponse
+import com.sun.mangareader01.data.model.MangaDetail
 import com.sun.mangareader01.data.model.MangasResponse
 import com.sun.mangareader01.data.source.local.OnLoadedDataCallback
 import com.sun.mangareader01.data.source.remote.MangaRemoteDataSource
@@ -28,8 +28,8 @@ class MainPresenter(
 
     override fun getMangaDetail(manga: Manga) = repository.getMangaDetail(
         manga,
-        object : OnLoadedDataCallback<MangaDetailResponse> {
-            override fun onSuccessful(data: MangaDetailResponse) {
+        object : OnLoadedDataCallback<MangaDetail> {
+            override fun onSuccessful(data: MangaDetail) {
             }
 
             override fun onFailed(exception: Exception) {
