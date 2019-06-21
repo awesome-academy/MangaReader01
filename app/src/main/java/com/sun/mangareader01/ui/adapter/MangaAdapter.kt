@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Manga
-import com.sun.mangareader01.ui.listener.ClickListener
+import com.sun.mangareader01.ui.listener.OnItemClickListener
 import com.sun.mangareader01.utils.Extensions.setImageUrl
 import com.sun.mangareader01.utils.Helpers
 import kotlinx.android.synthetic.main.item_manga.view.imageMangaItemCover
@@ -20,7 +20,7 @@ class MangaAdapter(
 ) : RecyclerView.Adapter<MangaAdapter.ViewHolder>(),
     CustomAdapter<Manga> {
 
-    override var onItemClickListener: ClickListener? = null
+    override var onItemClickListener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(
@@ -29,14 +29,8 @@ class MangaAdapter(
             onItemClickListener
         )
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.apply {
-            itemView.setOnClickListener {
-                onItemClickListener?.onClick(mangas[position])
-            }
-            bindData(mangas[position])
-        }
-    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+        holder.bindData(mangas[position])
 
     override fun getItemCount() = mangas.size
 
@@ -55,7 +49,7 @@ class MangaAdapter(
         mangas.addAll(newMangas)
     }
 
-    class ViewHolder(view: View, clickListener: ClickListener?) :
+    class ViewHolder(view: View, clickListener: OnItemClickListener?) :
         RecyclerView.ViewHolder(view) {
 
         private var item: Manga? = null
@@ -67,7 +61,9 @@ class MangaAdapter(
         }
 
         init {
-            view.setOnClickListener { clickListener?.onClick(item) }
+            view.setOnClickListener {
+                item?.let { clickListener?.onMangaClick(it) }
+            }
         }
 
         fun bindData(manga: Manga) {
@@ -89,7 +85,9 @@ class MangaAdapter(
         override fun areItemsTheSame(oldPosition: Int, newPosition: Int) =
             oldMangas[oldPosition].slug == newMangas[newPosition].slug
 
-        override fun areContentsTheSame(oldPosition: Int, newPosition: Int) =
-            areItemsTheSame(oldPosition, newPosition)
+        override fun areContentsTheSame(
+            oldPosition: Int,
+            newPosition: Int
+        ) = areItemsTheSame(oldPosition, newPosition)
     }
 }

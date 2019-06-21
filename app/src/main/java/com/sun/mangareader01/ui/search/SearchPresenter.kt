@@ -2,17 +2,12 @@ package com.sun.mangareader01.ui.search
 
 import com.sun.mangareader01.data.model.MangasResponse
 import com.sun.mangareader01.data.source.local.OnLoadedDataCallback
-import com.sun.mangareader01.data.source.remote.MangaRemoteDataSource
 import com.sun.mangareader01.data.source.repository.MangaRepository
 
 class SearchPresenter(
     private val view: SearchContract.View,
     private val repository: MangaRepository
 ) : SearchContract.Presenter {
-
-    init {
-        repository.initDataSource(MangaRemoteDataSource())
-    }
 
     override fun getMangas(query: String) = repository.getMangas(
         query,

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Chapter
-import com.sun.mangareader01.ui.listener.ClickListener
+import com.sun.mangareader01.ui.listener.OnItemClickListener
 import kotlinx.android.synthetic.main.item_chapter.view.textChapterTitle
 import kotlinx.android.synthetic.main.item_chapter.view.textUploadDate
 
@@ -17,7 +17,7 @@ class ChapterAdapter(
 ) : RecyclerView.Adapter<ChapterAdapter.ViewHolder>(),
     CustomAdapter<Chapter> {
 
-    override var onItemClickListener: ClickListener? = null
+    override var onItemClickListener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(
@@ -49,7 +49,7 @@ class ChapterAdapter(
         chapters.addAll(newChapters)
     }
 
-    class ViewHolder(view: View, clickListener: ClickListener?) :
+    class ViewHolder(view: View, clickListener: OnItemClickListener?) :
         RecyclerView.ViewHolder(view) {
 
         private var item: Chapter? = null
@@ -57,7 +57,7 @@ class ChapterAdapter(
         private val textUploadDate: TextView  by lazy { view.textUploadDate }
 
         init {
-            view.setOnClickListener { clickListener?.onClick(item) }
+            view.setOnClickListener { clickListener?.onChapterClick(item) }
         }
 
         fun bindData(chapter: Chapter) {

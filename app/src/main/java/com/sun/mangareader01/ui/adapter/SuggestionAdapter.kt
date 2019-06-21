@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Manga
-import com.sun.mangareader01.ui.listener.ClickListener
+import com.sun.mangareader01.ui.listener.OnItemClickListener
 import com.sun.mangareader01.utils.Constants.EMPTY_STRING
 import com.sun.mangareader01.utils.Extensions.setImageUrl
 import com.sun.mangareader01.utils.Helpers
@@ -19,7 +19,7 @@ class SuggestionAdapter(
 ) : BaseAdapter(),
     CustomAdapter<Manga> {
 
-    override var onItemClickListener: ClickListener? = null
+    override var onItemClickListener: OnItemClickListener? = null
     private var keyword = EMPTY_STRING
 
     override fun getView(
@@ -59,11 +59,11 @@ class SuggestionAdapter(
             view: View,
             manga: Manga,
             keyword: String,
-            clickListener: ClickListener?
+            clickListener: OnItemClickListener?
         ) : this(view) {
             textMangaTitle.text = Helpers.highlightKeyword(manga.title, keyword)
             imageMangaThumb.setImageUrl(Helpers.buildThumbUrl(manga.slug), true)
-            view.setOnClickListener { clickListener?.onClick(manga) }
+            view.setOnClickListener { clickListener?.onMangaClick(manga) }
         }
     }
 }

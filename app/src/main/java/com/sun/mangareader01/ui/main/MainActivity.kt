@@ -13,12 +13,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Chapter
 import com.sun.mangareader01.data.model.Manga
+import com.sun.mangareader01.data.source.remote.MangaRemoteDataSource
 import com.sun.mangareader01.data.source.repository.MangaRepository
 import com.sun.mangareader01.ui.adapter.CustomAdapter
 import com.sun.mangareader01.ui.adapter.SuggestionAdapter
 import com.sun.mangareader01.ui.detail.DetailFragment
 import com.sun.mangareader01.ui.home.HomeFragment
-import com.sun.mangareader01.ui.listener.ClickListener
+import com.sun.mangareader01.ui.listener.OnItemClickListener
 import com.sun.mangareader01.ui.mycomics.MyComicsFragment
 import com.sun.mangareader01.ui.search.SearchFragment
 import com.sun.mangareader01.ui.trending.TrendingFragment
@@ -31,10 +32,12 @@ class MainActivity : FragmentActivity(),
     MainContract.View,
     SearchView.OnQueryTextListener,
     BottomNavigationView.OnNavigationItemSelectedListener,
-    ClickListener {
+    OnItemClickListener {
 
     private val presenter: MainContract.Presenter by lazy {
-        MainPresenter(this, MangaRepository)
+        MainPresenter(this, MangaRepository.apply {
+            initDataSource(MangaRemoteDataSource())
+        })
     }
     private val searchHandler: Handler by lazy { Handler() }
     private val searchAdapter: CustomAdapter<Manga> by lazy {
@@ -107,20 +110,16 @@ class MainActivity : FragmentActivity(),
         return true
     }
 
-    override fun <T> onClick(item: T): Unit? = when (item) {
-        is Manga -> onMangaClick(item)
-        is Chapter -> onChapterClick(item)
-        is String -> onTagClick(item)
-        else -> null
+    override fun onMangaClick(manga: Manga?) {
+        manga?.let { openMangaDetail(it) }
     }
 
-    private fun onMangaClick(manga: Manga) = openMangaDetail(manga)
-
-    private fun onChapterClick(chapter: Chapter) {
+    override fun onChapterClick(chapter: Chapter?) {
     }
 
-    private fun onTagClick(string: String) =
-        viewSearch.setQuery(string, true)
+    override fun onTagClick(tag: String?) {
+        tag?.let { viewSearch.setQuery(it, true) }
+    }
 
     private fun addFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()

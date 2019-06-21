@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sun.mangareader01.R
-import com.sun.mangareader01.ui.listener.ClickListener
+import com.sun.mangareader01.ui.listener.OnItemClickListener
 import kotlinx.android.synthetic.main.item_tag.view.textTag
 
 class TagAdapter(
@@ -14,7 +14,7 @@ class TagAdapter(
 ) : RecyclerView.Adapter<TagAdapter.ViewHolder>(),
     CustomAdapter<String> {
 
-    override var onItemClickListener: ClickListener? = null
+    override var onItemClickListener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -38,14 +38,14 @@ class TagAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
         holder.bindData(tags[position])
 
-    class ViewHolder(view: View, clickListener: ClickListener?) :
+    class ViewHolder(view: View, clickListener: OnItemClickListener?) :
         RecyclerView.ViewHolder(view) {
 
         private var item: String? = null
         private val textTag: TextView by lazy { view.textTag }
 
         init {
-            view.setOnClickListener { clickListener?.onClick(item) }
+            view.setOnClickListener { clickListener?.onTagClick(item) }
         }
 
         fun bindData(tag: String) {

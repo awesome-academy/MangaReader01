@@ -15,7 +15,7 @@ import com.sun.mangareader01.data.model.MangaDetail
 import com.sun.mangareader01.data.source.repository.MangaRepository
 import com.sun.mangareader01.ui.adapter.ChapterAdapter
 import com.sun.mangareader01.ui.adapter.TagAdapter
-import com.sun.mangareader01.ui.listener.ClickListener
+import com.sun.mangareader01.ui.listener.OnItemClickListener
 import com.sun.mangareader01.utils.Constants.EMPTY_STRING
 import com.sun.mangareader01.utils.Extensions.setImageUrl
 import com.sun.mangareader01.utils.Extensions.showToast
@@ -33,7 +33,7 @@ class DetailFragment : Fragment(),
     private val chapterAdapter: ChapterAdapter by lazy {
         ChapterAdapter(mutableListOf())
     }
-    var clickListener: ClickListener? = null
+    private var clickListener: OnItemClickListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,7 +135,7 @@ class DetailFragment : Fragment(),
         private const val LIMIT_CHAPTER_SHOW = 5
 
         @JvmStatic
-        fun newInstance(manga: Manga?, clickListener: ClickListener) =
+        fun newInstance(manga: Manga?, clickListener: OnItemClickListener) =
             DetailFragment().apply {
                 this.clickListener = clickListener
                 arguments = Bundle().apply {
