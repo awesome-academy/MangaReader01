@@ -11,12 +11,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sun.mangareader01.R
+import com.sun.mangareader01.data.model.Chapter
 import com.sun.mangareader01.data.model.Manga
+import com.sun.mangareader01.data.source.remote.MangaRemoteDataSource
 import com.sun.mangareader01.data.source.repository.MangaRepository
 import com.sun.mangareader01.ui.adapter.CustomAdapter
 import com.sun.mangareader01.ui.adapter.SuggestionAdapter
 import com.sun.mangareader01.ui.detail.DetailFragment
 import com.sun.mangareader01.ui.home.HomeFragment
+import com.sun.mangareader01.ui.listener.OnItemClickListener
 import com.sun.mangareader01.ui.mycomics.MyComicsFragment
 import com.sun.mangareader01.ui.search.SearchFragment
 import com.sun.mangareader01.ui.trending.TrendingFragment
@@ -28,11 +31,13 @@ import kotlinx.android.synthetic.main.activity_main.viewSearch
 class MainActivity : FragmentActivity(),
     MainContract.View,
     SearchView.OnQueryTextListener,
-    CustomAdapter.OnItemClickListener<Manga>,
-    BottomNavigationView.OnNavigationItemSelectedListener {
+    BottomNavigationView.OnNavigationItemSelectedListener,
+    OnItemClickListener {
 
     private val presenter: MainContract.Presenter by lazy {
-        MainPresenter(this, MangaRepository)
+        MainPresenter(this, MangaRepository.apply {
+            initDataSource(MangaRemoteDataSource())
+        })
     }
     private val searchHandler: Handler by lazy { Handler() }
     private val searchAdapter: CustomAdapter<Manga> by lazy {
@@ -82,10 +87,10 @@ class MainActivity : FragmentActivity(),
         getCurrentFragment() is SearchFragment
 
     override fun onQueryTextSubmit(query: String): Boolean {
-        viewSearch.clearFocus()
         setIsTypingSearch(false)
         beginSearch(query)
         hideSuggestions()
+        viewSearch.clearFocus()
         return true
     }
 
@@ -95,9 +100,6 @@ class MainActivity : FragmentActivity(),
         return true
     }
 
-    // On suggestion item click listener
-    override fun onItemClick(item: Manga) = openMangaDetail(item)
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.itemHomeTab -> HomeFragment()
@@ -106,6 +108,17 @@ class MainActivity : FragmentActivity(),
             else -> null
         }?.let { replaceFragment(it) }
         return true
+    }
+
+    override fun onMangaClick(manga: Manga?) {
+        manga?.let { openMangaDetail(it) }
+    }
+
+    override fun onChapterClick(chapter: Chapter?) {
+    }
+
+    override fun onTagClick(tag: String?) {
+        tag?.let { viewSearch.setQuery(it, true) }
     }
 
     private fun addFragment(fragment: Fragment) {
@@ -144,7 +157,9 @@ class MainActivity : FragmentActivity(),
     }
 
     private fun openMangaDetail(manga: Manga) {
-        replaceFragment(DetailFragment.newInstance(manga))
+        viewSearch.clearFocus()
+        hideSuggestions()
+        replaceFragment(DetailFragment.newInstance(manga, this))
     }
 
     private fun displaySuggestions() {
@@ -154,9 +169,7 @@ class MainActivity : FragmentActivity(),
     private fun beginSearch(keyword: String) {
         if (isDisplayingSearchFragment()) {
             (getCurrentFragment() as SearchFragment).getMangas(keyword)
-        } else addFragment(SearchFragment.newInstance(keyword).apply {
-            onMangaClickListener = this@MainActivity
-        })
+        } else addFragment(SearchFragment.newInstance(keyword, this))
         viewSearch.clearFocus()
     }
 

@@ -13,18 +13,16 @@ import com.sun.mangareader01.data.model.Manga
 import com.sun.mangareader01.data.source.repository.MangaRepository
 import com.sun.mangareader01.ui.adapter.CustomAdapter
 import com.sun.mangareader01.ui.adapter.MangaAdapter
-import com.sun.mangareader01.ui.listener.ClickListener
+import com.sun.mangareader01.ui.listener.OnItemClickListener
 import com.sun.mangareader01.utils.Constants.EMPTY_STRING
 import com.sun.mangareader01.utils.Extensions.showToast
 import kotlinx.android.synthetic.main.fragment_search.barSearching
 import kotlinx.android.synthetic.main.fragment_search.recyclerSearchResult
 
 class SearchFragment : Fragment(),
-    SearchContract.View,
-    ClickListener.OnMangaClickListener {
+    SearchContract.View {
 
-    override var onMangaClickListener:
-        CustomAdapter.OnItemClickListener<Manga>? = null
+    var clickListener: OnItemClickListener? = null
     private var keyword = EMPTY_STRING
     private val presenter: SearchContract.Presenter by lazy {
         SearchPresenter(this, MangaRepository)
@@ -51,7 +49,7 @@ class SearchFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         setUpSearchResultView()
         getMangas(keyword)
-        mangaAdapter.onItemClickListener = onMangaClickListener
+        mangaAdapter.onItemClickListener = clickListener
     }
 
     fun getMangas(keyword: String) {
@@ -90,10 +88,12 @@ class SearchFragment : Fragment(),
         private const val BUNDLE_SEARCH_KEY = "keyword"
 
         @JvmStatic
-        fun newInstance(keyword: String?) = SearchFragment().apply {
-            arguments = Bundle().apply {
-                putString(BUNDLE_SEARCH_KEY, keyword)
+        fun newInstance(keyword: String?, clickListener: OnItemClickListener) =
+            SearchFragment().apply {
+                this.clickListener = clickListener
+                arguments = Bundle().apply {
+                    putString(BUNDLE_SEARCH_KEY, keyword)
+                }
             }
-        }
     }
 }

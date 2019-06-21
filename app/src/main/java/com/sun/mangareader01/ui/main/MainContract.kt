@@ -10,6 +10,5 @@ interface MainContract {
 
     interface Presenter {
         fun getSuggestions(query: String)
-        fun getMangaDetail(manga: Manga)
     }
 }
