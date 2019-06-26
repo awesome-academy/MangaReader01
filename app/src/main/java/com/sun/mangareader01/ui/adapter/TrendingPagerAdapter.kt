@@ -30,12 +30,13 @@ class TrendingPagerAdapter(
 
     override fun getPageTitle(position: Int) = getItem(position).title
 
-    class PagerFragment(
-        val title: String,
-        val icon: Int,
-        private val clickListener: OnItemClickListener,
-        private val refreshListener: SwipeRefreshLayout.OnRefreshListener
-    ) : Fragment() {
+    class PagerFragment : Fragment() {
+
+        var title: String? = null
+        var icon: Int? = null
+        private var clickListener: OnItemClickListener? = null
+        private var refreshListener: SwipeRefreshLayout.OnRefreshListener? =
+            null
 
         private val mangaAdapter: CustomAdapter<Manga> by lazy {
             MangaAdapter(mutableListOf())
@@ -70,6 +71,21 @@ class TrendingPagerAdapter(
 
         private fun hideLoadingBar() {
             layoutRefresh?.isRefreshing = false
+        }
+
+        companion object {
+            @JvmStatic
+            fun newInstance(
+                title: String,
+                icon: Int,
+                clickListener: OnItemClickListener?,
+                refreshListener: SwipeRefreshLayout.OnRefreshListener
+            ) = PagerFragment().apply {
+                this.title = title
+                this.icon = icon
+                this.clickListener = clickListener
+                this.refreshListener = refreshListener
+            }
         }
     }
 }

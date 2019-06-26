@@ -17,18 +17,17 @@ import com.sun.mangareader01.utils.Extensions.showToast
 import kotlinx.android.synthetic.main.fragment_trending.pagerTrending
 import kotlinx.android.synthetic.main.fragment_trending.tabTrending
 
-class TrendingFragment(
-    private val clickListener: OnItemClickListener
-) : Fragment(),
+class TrendingFragment : Fragment(),
     TabLayout.OnTabSelectedListener,
     TrendingContract.View,
     SwipeRefreshLayout.OnRefreshListener {
 
+    private var clickListener: OnItemClickListener? = null
     private val presenter: TrendingContract.Presenter by lazy {
         TrendingPresenter(this, MangaRepository)
     }
     private val hotFragment: PagerFragment by lazy {
-        PagerFragment(
+        PagerFragment.newInstance(
             getString(R.string.title_hot),
             R.drawable.ic_whatshot_black_24dp,
             clickListener,
@@ -36,7 +35,7 @@ class TrendingFragment(
         )
     }
     private val mostViewedFragment: PagerFragment by lazy {
-        PagerFragment(
+        PagerFragment.newInstance(
             getString(R.string.title_most_viewed),
             R.drawable.ic_grade_black_24dp,
             clickListener,
@@ -44,7 +43,7 @@ class TrendingFragment(
         )
     }
     private val lastReleaseFragment: PagerFragment by lazy {
-        PagerFragment(
+        PagerFragment.newInstance(
             getString(R.string.title_last_release),
             R.drawable.ic_new_releases_black_24dp,
             clickListener,
@@ -117,8 +116,18 @@ class TrendingFragment(
             setupWithViewPager(pagerTrending, true)
             addOnTabSelectedListener(this@TrendingFragment)
             for (index in 0 until pagerFragments.size) {
-                getTabAt(index)?.setIcon(pagerFragments[index].icon)
+                pagerFragments[index].icon?.let {
+                    getTabAt(index)?.setIcon(it)
+                }
             }
         }
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance(clickListener: OnItemClickListener) =
+            TrendingFragment().apply {
+                this.clickListener = clickListener
+            }
     }
 }

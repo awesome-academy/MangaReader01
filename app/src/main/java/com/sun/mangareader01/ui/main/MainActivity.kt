@@ -47,7 +47,7 @@ class MainActivity : FragmentActivity(),
     }
     private var isTypingSearch = false
     private val trendingFragment: TrendingFragment by lazy {
-        TrendingFragment(this)
+        TrendingFragment.newInstance(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
