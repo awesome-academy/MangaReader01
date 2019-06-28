@@ -2,6 +2,7 @@ package com.sun.mangareader01.ui.main
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Parcel
 import android.view.MenuItem
 import android.view.View
 import android.widget.BaseAdapter
@@ -31,19 +32,41 @@ import kotlinx.android.synthetic.main.activity_main.viewSearch
 class MainActivity : FragmentActivity(),
     MainContract.View,
     SearchView.OnQueryTextListener,
-    BottomNavigationView.OnNavigationItemSelectedListener,
-    OnItemClickListener {
+    BottomNavigationView.OnNavigationItemSelectedListener {
+
+    init {
+        MangaRepository.initDataSource(MangaRemoteDataSource())
+    }
 
     private val presenter: MainContract.Presenter by lazy {
-        MainPresenter(this, MangaRepository.apply {
-            initDataSource(MangaRemoteDataSource())
-        })
+        MainPresenter(this, MangaRepository)
     }
     private val searchHandler: Handler by lazy { Handler() }
     private val searchAdapter: CustomAdapter<Manga> by lazy {
         SuggestionAdapter(mutableListOf())
     }
     private var isTypingSearch = false
+    private val trendingFragment: TrendingFragment by lazy {
+        TrendingFragment.newInstance(onItemClickListener)
+    }
+
+    private val onItemClickListener = object : OnItemClickListener {
+        override fun onMangaClick(manga: Manga?) {
+            manga?.let { openMangaDetail(it) }
+        }
+
+        override fun onChapterClick(chapter: Chapter?) {
+        }
+
+        override fun onTagClick(tag: String?) {
+            tag?.let { viewSearch.setQuery(it, true) }
+        }
+
+        override fun writeToParcel(dest: Parcel?, flags: Int) {
+        }
+
+        override fun describeContents(): Int = 0
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +89,7 @@ class MainActivity : FragmentActivity(),
             }
             setOnQueryTextListener(this@MainActivity)
         }
-        searchAdapter.onItemClickListener = this
+        searchAdapter.onItemClickListener = onItemClickListener
     }
 
     override fun showSuggestions(mangas: List<Manga>) {
@@ -103,22 +126,11 @@ class MainActivity : FragmentActivity(),
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.itemHomeTab -> HomeFragment()
-            R.id.itemTrendingTab -> TrendingFragment()
+            R.id.itemTrendingTab -> trendingFragment
             R.id.itemMyComicsTab -> MyComicsFragment()
             else -> null
-        }?.let { replaceFragment(it) }
+        }?.also { replaceFragment(it) }
         return true
-    }
-
-    override fun onMangaClick(manga: Manga?) {
-        manga?.let { openMangaDetail(it) }
-    }
-
-    override fun onChapterClick(chapter: Chapter?) {
-    }
-
-    override fun onTagClick(tag: String?) {
-        tag?.let { viewSearch.setQuery(it, true) }
     }
 
     private fun addFragment(fragment: Fragment) {
@@ -159,7 +171,7 @@ class MainActivity : FragmentActivity(),
     private fun openMangaDetail(manga: Manga) {
         viewSearch.clearFocus()
         hideSuggestions()
-        replaceFragment(DetailFragment.newInstance(manga, this))
+        replaceFragment(DetailFragment.newInstance(manga, onItemClickListener))
     }
 
     private fun displaySuggestions() {
@@ -167,9 +179,11 @@ class MainActivity : FragmentActivity(),
     }
 
     private fun beginSearch(keyword: String) {
-        if (isDisplayingSearchFragment()) {
+        if (isDisplayingSearchFragment())
             (getCurrentFragment() as SearchFragment).getMangas(keyword)
-        } else addFragment(SearchFragment.newInstance(keyword, this))
+        else addFragment(
+            SearchFragment.newInstance(keyword, onItemClickListener)
+        )
         viewSearch.clearFocus()
     }
 
