@@ -27,4 +27,38 @@ object MangaRepository : MangaDataSource.Remote {
     ) {
         remote?.getMangaDetail(manga, callback)
     }
+
+    override fun getFilteredMangas(
+        page: Int,
+        category: String,
+        alpha: String,
+        sortBy: String,
+        asc: Boolean,
+        author: String,
+        tag: String,
+        callback: OnLoadedDataCallback<MangasResponse>
+    ) {
+        remote?.getFilteredMangas(
+            page = page,
+            category = category,
+            alpha = alpha,
+            sortBy = sortBy,
+            asc = asc,
+            author = author,
+            tag = tag,
+            callback = callback
+        )
+    }
+
+    override fun getHotMangas(callback: OnLoadedDataCallback<MangasResponse>) {
+        remote?.getHotMangas(callback)
+    }
+
+    override fun getLastReleasedMangas(callback: OnLoadedDataCallback<MangasResponse>) {
+        remote?.getLastReleasedMangas(callback)
+    }
+
+    override fun getMostViewedMangas(callback: OnLoadedDataCallback<MangasResponse>) {
+        remote?.getMostViewedMangas(callback)
+    }
 }

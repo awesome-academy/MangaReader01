@@ -8,4 +8,5 @@ object PathConstants {
     const val PATH_THUMB_FILE_NAME = "cover_thumb.jpg"
     const val PATH_SEARCH = "search"
     const val PATH_COMIC = "comic"
+    const val PATH_FILTER_LIST = "filterList"
 }
