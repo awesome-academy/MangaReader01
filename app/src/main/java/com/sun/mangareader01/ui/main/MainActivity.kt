@@ -22,6 +22,7 @@ import com.sun.mangareader01.ui.detail.DetailFragment
 import com.sun.mangareader01.ui.home.HomeFragment
 import com.sun.mangareader01.ui.listener.OnItemClickListener
 import com.sun.mangareader01.ui.mycomics.MyComicsFragment
+import com.sun.mangareader01.ui.read.ReadActivity
 import com.sun.mangareader01.ui.search.SearchFragment
 import com.sun.mangareader01.ui.trending.TrendingFragment
 import com.sun.mangareader01.utils.Extensions.showToast
@@ -56,6 +57,11 @@ class MainActivity : FragmentActivity(),
         }
 
         override fun onChapterClick(chapter: Chapter?) {
+            chapter?.also {
+                startActivity(
+                    ReadActivity.getProfileIntent(baseContext, chapter)
+                )
+            }
         }
 
         override fun onTagClick(tag: String?) {

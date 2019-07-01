@@ -61,6 +61,7 @@ class ChapterAdapter(
         }
 
         fun bindData(chapter: Chapter) {
+            item = chapter
             textChapterTitle.text = chapter.title
             textUploadDate.text = chapter.uploadDate
         }

@@ -135,7 +135,7 @@ class ApiHelpers {
         }
 
         private fun getPages() = JSONArray().apply {
-            body.select(PAGE_URL).forEach { put(it.attr(ATTR_DATA_SRC)) }
+            body.select(PAGE_URL).forEach { put(it.attr(ATTR_DATA_SRC).trim()) }
         }
 
         companion object CssQuery {
