@@ -1,6 +1,8 @@
 package com.sun.mangareader01.ui.read
 
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -39,10 +41,12 @@ class ReadActivity : Activity(),
             val currentPageNumber =
                 (recyclerView.layoutManager as LinearLayoutManager)
                     .findLastCompletelyVisibleItemPosition() + 1
-            if (currentPageNumber > 0) updateCurrentPage(
-                currentPageNumber,
-                recyclerView.adapter?.itemCount
-            )
+            if (currentPageNumber > 0) {
+                updateCurrentPage(
+                    currentPageNumber,
+                    recyclerView.adapter?.itemCount
+                )
+            }
         }
     }
 
@@ -60,16 +64,20 @@ class ReadActivity : Activity(),
     }
 
     override fun onBackPressed() {
-        if (imageZoom.isVisible) hideZoomPage() else super.onBackPressed()
+        if (imageZoom.isVisible) {
+            hideZoomPage()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     override fun onClick(v: View?) {
-        if (v is ImageView) displayZoomPage(v)
+        if (v?.id == R.id.imagePage) displayZoomPage(v as ImageView)
     }
 
     override fun showPages(pageUrls: List<String>) {
         pageAdapter.updateData(pageUrls)
-        updateCurrentPage(1, pageAdapter.itemCount)
+        updateCurrentPage(FIRST_PAGE_NUMBER, pageAdapter.itemCount)
     }
 
     override fun showError(exception: Exception) {
@@ -105,5 +113,11 @@ class ReadActivity : Activity(),
 
     companion object {
         const val BUNDLE_CHAPTER_KEY = "chapter"
+        private const val FIRST_PAGE_NUMBER = 1
+
+        fun getProfileIntent(context: Context, chapter: Chapter) =
+            Intent(context, ReadActivity::class.java).apply {
+                putExtra(BUNDLE_CHAPTER_KEY, chapter)
+            }
     }
 }

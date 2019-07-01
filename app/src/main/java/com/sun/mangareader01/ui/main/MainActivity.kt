@@ -1,6 +1,5 @@
 package com.sun.mangareader01.ui.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Parcel
@@ -24,7 +23,6 @@ import com.sun.mangareader01.ui.home.HomeFragment
 import com.sun.mangareader01.ui.listener.OnItemClickListener
 import com.sun.mangareader01.ui.mycomics.MyComicsFragment
 import com.sun.mangareader01.ui.read.ReadActivity
-import com.sun.mangareader01.ui.read.ReadActivity.Companion.BUNDLE_CHAPTER_KEY
 import com.sun.mangareader01.ui.search.SearchFragment
 import com.sun.mangareader01.ui.trending.TrendingFragment
 import com.sun.mangareader01.utils.Extensions.showToast
@@ -59,9 +57,10 @@ class MainActivity : FragmentActivity(),
         }
 
         override fun onChapterClick(chapter: Chapter?) {
-            Intent(baseContext, ReadActivity::class.java).apply {
-                putExtra(BUNDLE_CHAPTER_KEY, chapter)
-                startActivity(this)
+            chapter?.also {
+                startActivity(
+                    ReadActivity.getProfileIntent(baseContext, chapter)
+                )
             }
         }
 

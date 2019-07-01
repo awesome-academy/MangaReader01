@@ -5,7 +5,6 @@ import android.graphics.Matrix
 import android.graphics.PointF
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
@@ -124,7 +123,6 @@ class TouchImageView : AppCompatImageView,
 
     override fun setImageDrawable(drawable: Drawable?) {
         super.setImageDrawable(drawable)
-        Log.e(this.javaClass.simpleName, "$viewWidth x $viewHeight")
         reset()
     }
 
