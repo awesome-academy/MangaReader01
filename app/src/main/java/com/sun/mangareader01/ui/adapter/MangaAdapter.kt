@@ -15,7 +15,7 @@ import com.sun.mangareader01.utils.Helpers
 import kotlinx.android.synthetic.main.item_manga.view.imageMangaItemCover
 import kotlinx.android.synthetic.main.item_manga.view.textMangaItemTitle
 
-class MangaAdapter(
+open class MangaAdapter(
     private val mangas: MutableList<Manga>
 ) : RecyclerView.Adapter<MangaAdapter.ViewHolder>(),
     CustomAdapter<Manga> {
@@ -25,7 +25,7 @@ class MangaAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_manga, parent, false),
+                .inflate(R.layout.item_manga_cover, parent, false),
             onItemClickListener
         )
 
@@ -77,7 +77,6 @@ class MangaAdapter(
         private val oldMangas: List<Manga>,
         private val newMangas: List<Manga>
     ) : DiffUtil.Callback() {
-
         override fun getOldListSize() = oldMangas.size
 
         override fun getNewListSize() = newMangas.size
@@ -85,9 +84,7 @@ class MangaAdapter(
         override fun areItemsTheSame(oldPosition: Int, newPosition: Int) =
             oldMangas[oldPosition].slug == newMangas[newPosition].slug
 
-        override fun areContentsTheSame(
-            oldPosition: Int,
-            newPosition: Int
-        ) = areItemsTheSame(oldPosition, newPosition)
+        override fun areContentsTheSame(oldPosition: Int, newPosition: Int) =
+            areItemsTheSame(oldPosition, newPosition)
     }
 }

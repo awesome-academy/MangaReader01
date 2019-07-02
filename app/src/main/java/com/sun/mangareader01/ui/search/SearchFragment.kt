@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Manga
@@ -47,6 +47,7 @@ class SearchFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        presenter.getMangas(keyword)
         setUpSearchResultView()
         getMangas(keyword)
         mangaAdapter.onItemClickListener = clickListener
@@ -60,7 +61,7 @@ class SearchFragment : Fragment(),
     override fun showMangas(mangas: List<Manga>) {
         mangaAdapter.updateData(mangas)
         hideSearchingBar()
-        recyclerSearchResult.scrollToPosition(0)
+        recyclerSearchResult?.scrollToPosition(0)
     }
 
     override fun showError(exception: Exception) {
@@ -70,7 +71,7 @@ class SearchFragment : Fragment(),
 
     private fun setUpSearchResultView() {
         recyclerSearchResult.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = GridLayoutManager(context, 3)
             adapter = mangaAdapter as RecyclerView.Adapter<*>
             itemAnimator = DefaultItemAnimator()
         }
