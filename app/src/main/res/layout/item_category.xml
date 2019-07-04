@@ -3,6 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
+        android:paddingTop="@dimen/dp_8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     <TextView
@@ -16,7 +17,7 @@
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerMangas"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_128"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             tools:listitem="@layout/item_manga_cover_2"
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>

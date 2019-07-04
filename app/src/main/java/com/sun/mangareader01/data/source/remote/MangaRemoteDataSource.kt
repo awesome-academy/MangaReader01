@@ -8,7 +8,9 @@ import com.sun.mangareader01.utils.Constants.AUTHORITY_READ_COMICS_ONLINE
 import com.sun.mangareader01.utils.Constants.SCHEME_HTTPS
 import com.sun.mangareader01.utils.PathConstants
 import com.sun.mangareader01.utils.PathConstants.PATH_COMIC
+import com.sun.mangareader01.utils.PathConstants.PATH_COMIC_LIST
 import com.sun.mangareader01.utils.PathConstants.PATH_FILTER_LIST
+import com.sun.mangareader01.utils.PathConstants.PATH_RANDOM
 
 class MangaRemoteDataSource : MangaDataSource.Remote {
 
@@ -33,6 +35,17 @@ class MangaRemoteDataSource : MangaDataSource.Remote {
             scheme = SCHEME_HTTPS,
             authority = AUTHORITY_READ_COMICS_ONLINE,
             paths = listOf(PATH_COMIC, manga.slug)
+        ).toUrl()
+        GetResponseAsync(MangaDetailHandler(), callback).execute(requestUrl)
+    }
+
+    override fun getRandomMangaDetail(
+        callback: OnLoadedDataCallback<MangaDetail>
+    ) {
+        val requestUrl = DataRequest(
+            scheme = SCHEME_HTTPS,
+            authority = AUTHORITY_READ_COMICS_ONLINE,
+            paths = listOf(PATH_RANDOM)
         ).toUrl()
         GetResponseAsync(MangaDetailHandler(), callback).execute(requestUrl)
     }
@@ -96,6 +109,18 @@ class MangaRemoteDataSource : MangaDataSource.Remote {
         callback: OnLoadedDataCallback<PagesResponse>
     ) {
         GetResponseAsync(PagesResponseHandler(), callback).execute(chapter.url)
+    }
+
+    override fun getCategories(
+        callback: OnLoadedDataCallback<CategoriesResponse>
+    ) {
+        val requestUrl = DataRequest(
+            scheme = SCHEME_HTTPS,
+            authority = AUTHORITY_READ_COMICS_ONLINE,
+            paths = listOf(PATH_COMIC_LIST)
+        ).toUrl()
+        GetResponseAsync(CategoriesResponseHandler(), callback)
+            .execute(requestUrl)
     }
 
     companion object {

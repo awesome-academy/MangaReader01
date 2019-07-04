@@ -9,4 +9,6 @@ object PathConstants {
     const val PATH_SEARCH = "search"
     const val PATH_COMIC = "comic"
     const val PATH_FILTER_LIST = "filterList"
+    const val PATH_COMIC_LIST = "comic-list"
+    const val PATH_RANDOM = "random"
 }
