@@ -53,8 +53,13 @@ class MainActivity : FragmentActivity(),
     private val homeFragment: HomeFragment by lazy {
         HomeFragment.newInstance(onItemClickListener)
     }
+    private val myComicsFragment: MyComicsFragment by lazy {
+        MyComicsFragment.newInstance(onItemClickListener)
+    }
     private val onItemClickListener = object : OnItemClickListener {
+
         override fun onMangaClick(manga: Manga?) {
+            setIsTypingSearch(false)
             manga?.let { openMangaDetail(it) }
         }
 
@@ -70,10 +75,16 @@ class MainActivity : FragmentActivity(),
             tag?.let { viewSearch.setQuery(it, true) }
         }
 
+        override fun onDeleteManga(manga: Manga?) {
+        }
+
+        override fun onDownloadManga(manga: Manga?) {
+        }
+
         override fun writeToParcel(dest: Parcel?, flags: Int) {
         }
 
-        override fun describeContents(): Int = 0
+        override fun describeContents() = 0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -135,7 +146,7 @@ class MainActivity : FragmentActivity(),
         when (item.itemId) {
             R.id.itemHomeTab -> homeFragment
             R.id.itemTrendingTab -> trendingFragment
-            R.id.itemMyComicsTab -> MyComicsFragment()
+            R.id.itemMyComicsTab -> myComicsFragment
             else -> null
         }?.also { replaceFragment(it) }
         return true

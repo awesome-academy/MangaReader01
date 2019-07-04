@@ -8,4 +8,7 @@ interface OnItemClickListener : Parcelable {
     fun onMangaClick(manga: Manga?)
     fun onChapterClick(chapter: Chapter?)
     fun onTagClick(tag: String?)
+
+    fun onDeleteManga(manga: Manga?)
+    fun onDownloadManga(manga: Manga?)
 }
