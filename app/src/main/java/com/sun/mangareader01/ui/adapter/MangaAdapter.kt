@@ -14,6 +14,8 @@ import com.sun.mangareader01.utils.Extensions.setImageUrl
 import com.sun.mangareader01.utils.Helpers
 import kotlinx.android.synthetic.main.item_manga.view.imageMangaItemCover
 import kotlinx.android.synthetic.main.item_manga.view.textMangaItemTitle
+import kotlinx.android.synthetic.main.item_manga_action.view.imageDelete
+import kotlinx.android.synthetic.main.item_manga_action.view.imageDownload
 
 open class MangaAdapter(
     private val mangas: MutableList<Manga>
@@ -63,6 +65,16 @@ open class MangaAdapter(
         init {
             view.setOnClickListener {
                 item?.let { clickListener?.onMangaClick(it) }
+            }
+            initActionListener(clickListener)
+        }
+
+        private fun initActionListener(clickListener: OnItemClickListener?) {
+            itemView.imageDelete?.setOnClickListener {
+                clickListener?.onDeleteManga(item)
+            }
+            itemView.imageDownload?.setOnClickListener {
+                clickListener?.onDownloadManga(item)
             }
         }
 

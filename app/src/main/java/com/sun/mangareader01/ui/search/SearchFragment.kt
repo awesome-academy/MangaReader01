@@ -35,6 +35,7 @@ class SearchFragment : Fragment(),
         super.onCreate(savedInstanceState)
         arguments?.also {
             keyword = it.getString(BUNDLE_SEARCH_KEY) ?: keyword
+            clickListener = it.getParcelable(BUNDLE_CLICK_LISTENER_KEY)
         }
     }
 
@@ -42,8 +43,7 @@ class SearchFragment : Fragment(),
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? =
-        inflater.inflate(R.layout.fragment_search, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_search, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -87,13 +87,14 @@ class SearchFragment : Fragment(),
 
     companion object {
         private const val BUNDLE_SEARCH_KEY = "keyword"
+        private const val BUNDLE_CLICK_LISTENER_KEY = "clickListener"
 
         @JvmStatic
         fun newInstance(keyword: String?, clickListener: OnItemClickListener) =
             SearchFragment().apply {
-                this.clickListener = clickListener
                 arguments = Bundle().apply {
                     putString(BUNDLE_SEARCH_KEY, keyword)
+                    putParcelable(BUNDLE_CLICK_LISTENER_KEY, clickListener)
                 }
             }
     }
