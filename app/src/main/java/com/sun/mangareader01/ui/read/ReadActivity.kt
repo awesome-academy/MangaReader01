@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Chapter
+import com.sun.mangareader01.data.source.local.MangaLocalDataSource
 import com.sun.mangareader01.data.source.remote.MangaRemoteDataSource
 import com.sun.mangareader01.data.source.repository.MangaRepository
 import com.sun.mangareader01.ui.adapter.PageAdapter
@@ -51,7 +52,10 @@ class ReadActivity : Activity(),
     }
 
     init {
-        MangaRepository.initDataSource(MangaRemoteDataSource())
+        MangaRepository.initDataSource(
+            MangaRemoteDataSource(),
+            MangaLocalDataSource(this)
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

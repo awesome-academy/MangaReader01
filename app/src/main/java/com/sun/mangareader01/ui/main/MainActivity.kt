@@ -14,6 +14,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Chapter
 import com.sun.mangareader01.data.model.Manga
+import com.sun.mangareader01.data.source.local.MangaLocalDataSource
 import com.sun.mangareader01.data.source.remote.MangaRemoteDataSource
 import com.sun.mangareader01.data.source.repository.MangaRepository
 import com.sun.mangareader01.ui.adapter.CustomAdapter
@@ -36,7 +37,10 @@ class MainActivity : FragmentActivity(),
     BottomNavigationView.OnNavigationItemSelectedListener {
 
     init {
-        MangaRepository.initDataSource(MangaRemoteDataSource())
+        MangaRepository.initDataSource(
+            MangaRemoteDataSource(),
+            MangaLocalDataSource(this)
+        )
     }
 
     private val presenter: MainContract.Presenter by lazy {
