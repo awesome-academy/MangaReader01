@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Manga
 import com.sun.mangareader01.ui.listener.OnItemClickListener
+import com.sun.mangareader01.ui.listener.OnMangaActionListener
 import com.sun.mangareader01.utils.Extensions.setImageUrl
 import com.sun.mangareader01.utils.Helpers
 import kotlinx.android.synthetic.main.item_manga.view.imageMangaItemCover
@@ -20,15 +21,17 @@ import kotlinx.android.synthetic.main.item_manga_action.view.imageDownload
 open class MangaAdapter(
     private val mangas: MutableList<Manga>
 ) : RecyclerView.Adapter<MangaAdapter.ViewHolder>(),
-    CustomAdapter<Manga> {
+    ActionMangaAdapter {
 
     override var onItemClickListener: OnItemClickListener? = null
+    override var onMangaActionListener: OnMangaActionListener? = null
+    override var layoutViewResourceId: Int = R.layout.item_manga_cover
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_manga_cover, parent, false),
-            onItemClickListener
+                .inflate(layoutViewResourceId, parent, false),
+            onItemClickListener, onMangaActionListener
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
@@ -51,8 +54,11 @@ open class MangaAdapter(
         mangas.addAll(newMangas)
     }
 
-    class ViewHolder(view: View, clickListener: OnItemClickListener?) :
-        RecyclerView.ViewHolder(view) {
+    class ViewHolder(
+        view: View,
+        clickListener: OnItemClickListener?,
+        onMangaActionListener: OnMangaActionListener? = null
+    ) : RecyclerView.ViewHolder(view) {
 
         private var item: Manga? = null
         private val textSuggestionTitle: TextView by lazy {
@@ -66,15 +72,17 @@ open class MangaAdapter(
             view.setOnClickListener {
                 item?.let { clickListener?.onMangaClick(it) }
             }
-            initActionListener(clickListener)
+            initActionListener(onMangaActionListener)
         }
 
-        private fun initActionListener(clickListener: OnItemClickListener?) {
+        private fun initActionListener(
+            onMangaActionListener: OnMangaActionListener?
+        ) {
             itemView.imageDelete?.setOnClickListener {
-                clickListener?.onDeleteManga(item)
+                onMangaActionListener?.onDeleteManga(item)
             }
             itemView.imageDownload?.setOnClickListener {
-                clickListener?.onDownloadManga(item)
+                onMangaActionListener?.onDownloadManga(item)
             }
         }
 

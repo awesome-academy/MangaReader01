@@ -12,23 +12,50 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Manga
+import com.sun.mangareader01.data.source.repository.MangaRepository
 import com.sun.mangareader01.ui.adapter.ActionMangaAdapter
-import com.sun.mangareader01.ui.adapter.CustomAdapter
+import com.sun.mangareader01.ui.adapter.MangaAdapter
 import com.sun.mangareader01.ui.listener.OnItemClickListener
+import com.sun.mangareader01.ui.listener.OnMangaActionListener
+import com.sun.mangareader01.utils.Extensions.showToast
 import kotlinx.android.synthetic.main.fragment_my_comics.barLoading
 import kotlinx.android.synthetic.main.fragment_my_comics.recyclerMyComics
 
-class MyComicsFragment : Fragment() {
+class MyComicsFragment : Fragment(),
+    MyComicsContract.View {
 
-    private var clickListener: OnItemClickListener? = null
-    private val mangaAdapter: CustomAdapter<Manga> by lazy {
-        ActionMangaAdapter(mutableListOf())
+    private val presenter: MyComicsContract.Presenter by lazy {
+        MyComicsPresenter(this, MangaRepository)
+    }
+    private val mangas: MutableList<Manga> by lazy {
+        mutableListOf<Manga>()
+    }
+    private val mangaAdapter: ActionMangaAdapter by lazy {
+        MangaAdapter(mangas)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.also {
             clickListener = it.getParcelable(BUNDLE_CLICK_LISTENER_KEY)
+        }
+    }
+
+    private var clickListener: OnItemClickListener? = null
+    private var onMangaActionListener = object : OnMangaActionListener {
+        override fun onDeleteManga(manga: Manga?) {
+            manga?.also {
+                val position = mangas.indexOf(it)
+                mangas.remove(it)
+                (mangaAdapter as MangaAdapter).apply {
+                    notifyItemRemoved(position)
+                    notifyItemRangeChanged(position, mangas.size)
+                }
+                presenter.deleteManga(it)
+            }
+        }
+
+        override fun onDownloadManga(manga: Manga?) {
         }
     }
 
@@ -40,13 +67,33 @@ class MyComicsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mangaAdapter.onItemClickListener = clickListener
-        recyclerMyComics?.apply {
+        mangaAdapter.run {
+            layoutViewResourceId = R.layout.item_manga_action
+            onItemClickListener = clickListener
+            onMangaActionListener = this@MyComicsFragment.onMangaActionListener
+        }
+        recyclerMyComics?.run {
             layoutManager = LinearLayoutManager(context)
             adapter = mangaAdapter as RecyclerView.Adapter<*>
             itemAnimator = DefaultItemAnimator()
             addItemDecoration(DividerItemDecoration(context, VERTICAL))
         }
+        showLoadingBar()
+        presenter.getMyMangas()
+    }
+
+    override fun showMangas(mangas: List<Manga>) {
+        mangaAdapter.updateData(mangas)
+        hideLoadingBar()
+    }
+
+    override fun showError(exception: Exception) {
+        context?.showToast(exception.toString())
+        hideLoadingBar()
+    }
+
+    override fun confirmDeleted(successful: Boolean) {
+        if (!successful) presenter.getMyMangas()
     }
 
     private fun showLoadingBar() {

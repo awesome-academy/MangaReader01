@@ -1,38 +1,32 @@
-package com.sun.mangareader01.ui.main
+package com.sun.mangareader01.ui.mycomics
 
 import com.sun.mangareader01.data.model.Manga
 import com.sun.mangareader01.data.model.MangasResponse
 import com.sun.mangareader01.data.source.local.OnLoadedDataCallback
 import com.sun.mangareader01.data.source.repository.MangaRepository
 
-class MainPresenter(
-    private val view: MainContract.View,
+class MyComicsPresenter(
+    private val view: MyComicsContract.View,
     private val repository: MangaRepository
-) : MainContract.Presenter {
+) : MyComicsContract.Presenter {
 
-    override fun getSuggestions(query: String) = repository.getMangas(
-        query,
+    override fun getMyMangas() = repository.getMyMangas(
         object : OnLoadedDataCallback<MangasResponse> {
             override fun onSuccessful(data: MangasResponse) =
-                view.showSuggestions(data.mangas.take(SUGGESTIONS_LIMIT))
+                view.showMangas(data.mangas)
 
             override fun onFailed(exception: Exception) =
                 view.showError(exception)
-        })
-
-    override fun insertManga(manga: Manga) = repository.insertMangas(
-        manga,
-        object : OnLoadedDataCallback<Boolean> {
-            override fun onSuccessful(data: Boolean) {
-            }
-
-            override fun onFailed(exception: Exception) {
-                view.showError(exception)
-            }
         }
     )
 
-    companion object {
-        const val SUGGESTIONS_LIMIT = 5
-    }
+    override fun deleteManga(manga: Manga) = repository.deleteManga(
+        manga,
+        object : OnLoadedDataCallback<Boolean> {
+            override fun onSuccessful(data: Boolean) = view.confirmDeleted(data)
+
+            override fun onFailed(exception: Exception) =
+                view.showError(exception)
+        }
+    )
 }

@@ -10,5 +10,6 @@ interface MainContract {
 
     interface Presenter {
         fun getSuggestions(query: String)
+        fun insertManga(manga: Manga)
     }
 }
