@@ -46,12 +46,12 @@ abstract class PagerFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         displayLoadingBar()
-        recyclerMangas.apply {
+        recyclerMangas?.apply {
             layoutManager = GridLayoutManager(context, 3)
             adapter = mangaAdapter as RecyclerView.Adapter<*>
         }
         mangaAdapter.onItemClickListener = onItemClickListener
-        layoutRefresh.setOnRefreshListener(this)
+        layoutRefresh?.setOnRefreshListener(this)
         presenter.getMangas()
     }
 

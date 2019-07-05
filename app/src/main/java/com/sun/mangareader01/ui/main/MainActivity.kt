@@ -66,7 +66,7 @@ class MainActivity : FragmentActivity(),
         override fun onChapterClick(chapter: Chapter?) {
             chapter?.also {
                 startActivity(
-                    ReadActivity.getProfileIntent(baseContext, chapter)
+                    ReadActivity.getProfileIntent(baseContext, it)
                 )
             }
         }
@@ -96,12 +96,12 @@ class MainActivity : FragmentActivity(),
 
     private fun initView() {
         replaceFragment(homeFragment)
-        listSuggestions.adapter = searchAdapter as BaseAdapter
+        listSuggestions?.adapter = searchAdapter as BaseAdapter
     }
 
     private fun initListener() {
-        viewNavigationBar.setOnNavigationItemSelectedListener(this)
-        viewSearch.apply {
+        viewNavigationBar?.setOnNavigationItemSelectedListener(this)
+        viewSearch?.apply {
             setOnClickListener {
                 isIconified = false
                 isTypingSearch = true
@@ -188,7 +188,7 @@ class MainActivity : FragmentActivity(),
     }
 
     private fun openMangaDetail(manga: Manga) {
-        viewSearch.clearFocus()
+        viewSearch?.clearFocus()
         hideSuggestions()
         replaceFragment(DetailFragment.newInstance(manga, onItemClickListener))
     }

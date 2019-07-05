@@ -41,7 +41,7 @@ class MyComicsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mangaAdapter.onItemClickListener = clickListener
-        recyclerMyComics.apply {
+        recyclerMyComics?.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = mangaAdapter as RecyclerView.Adapter<*>
             itemAnimator = DefaultItemAnimator()
@@ -50,11 +50,11 @@ class MyComicsFragment : Fragment() {
     }
 
     private fun showLoadingBar() {
-        barLoading.visibility = View.VISIBLE
+        barLoading?.visibility = View.VISIBLE
     }
 
     private fun hideLoadingBar() {
-        barLoading.visibility = View.GONE
+        barLoading?.visibility = View.GONE
     }
 
     companion object {

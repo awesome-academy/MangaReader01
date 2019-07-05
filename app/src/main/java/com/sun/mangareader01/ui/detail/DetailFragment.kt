@@ -46,8 +46,7 @@ class DetailFragment : Fragment(),
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? =
-        inflater.inflate(R.layout.fragment_detail, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_detail, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,8 +60,8 @@ class DetailFragment : Fragment(),
     override fun showMangaDetail(data: MangaDetail) {
         hideLoading()
         showRating(data.rating)
-        if (data.author.isNotBlank()) textAuthor.text = data.author
-        textSummary.text = data.summary
+        if (data.author.isNotBlank()) textAuthor?.text = data.author
+        textSummary?.text = data.summary
         showTags(data.tags)
         showChapters(data.chapters)
     }
@@ -72,30 +71,30 @@ class DetailFragment : Fragment(),
     }
 
     private fun showExistDetails() {
-        textMangaTitle.text = manga.title
-        imageBackComicCover.setImageUrl(buildCoverUrl(manga.slug))
-        imageComicCover.setImageUrl(buildCoverUrl(manga.slug))
+        textMangaTitle?.text = manga.title
+        imageBackComicCover?.setImageUrl(buildCoverUrl(manga.slug))
+        imageComicCover?.setImageUrl(buildCoverUrl(manga.slug))
     }
 
     private fun showRating(rating: Float) {
-        barRating.rating = rating
-        textRating.text = getString(R.string.text_rating, rating)
+        barRating?.rating = rating
+        textRating?.text = getString(R.string.text_rating, rating)
     }
 
     private fun showTags(tags: List<String>) {
-        recyclerTags.apply {
+        recyclerTags?.apply {
             layoutManager = FlexboxLayoutManager(context, ROW)
             adapter = tagAdapter.also { it.updateData(tags) }
         }
     }
 
     private fun showChapters(allChapters: List<Chapter>) {
-        recyclerChapters.apply {
+        recyclerChapters?.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = chapterAdapter
         }
         showMoreChapters(allChapters)
-        textLoadMore.setOnClickListener {
+        textLoadMore?.setOnClickListener {
             showMoreChapters(allChapters)
         }
     }
@@ -111,23 +110,23 @@ class DetailFragment : Fragment(),
         chapterAdapter.itemCount < chapters.size
 
     private fun showLoadMore() {
-        imageLoadMoreIcon.visibility = View.VISIBLE
-        textLoadMore.visibility = View.VISIBLE
+        imageLoadMoreIcon?.visibility = View.VISIBLE
+        textLoadMore?.visibility = View.VISIBLE
     }
 
     private fun hideLoadMore() {
-        imageLoadMoreIcon.visibility = View.GONE
-        textLoadMore.visibility = View.GONE
+        imageLoadMoreIcon?.visibility = View.GONE
+        textLoadMore?.visibility = View.GONE
     }
 
     private fun displayLoading() {
-        viewLoading.visibility = View.VISIBLE
-        barLoading.visibility = View.VISIBLE
+        viewLoading?.visibility = View.VISIBLE
+        barLoading?.visibility = View.VISIBLE
     }
 
     private fun hideLoading() {
-        viewLoading.visibility = View.GONE
-        barLoading.visibility = View.GONE
+        viewLoading?.visibility = View.GONE
+        barLoading?.visibility = View.GONE
     }
 
     companion object {

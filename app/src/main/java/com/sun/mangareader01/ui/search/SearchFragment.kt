@@ -70,7 +70,7 @@ class SearchFragment : Fragment(),
     }
 
     private fun setUpSearchResultView() {
-        recyclerSearchResult.apply {
+        recyclerSearchResult?.apply {
             layoutManager = GridLayoutManager(context, 3)
             adapter = mangaAdapter as RecyclerView.Adapter<*>
             itemAnimator = DefaultItemAnimator()
