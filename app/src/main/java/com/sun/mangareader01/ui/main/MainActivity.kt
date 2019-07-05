@@ -64,7 +64,10 @@ class MainActivity : FragmentActivity(),
 
         override fun onMangaClick(manga: Manga?) {
             setIsTypingSearch(false)
-            manga?.let { openMangaDetail(it) }
+            manga?.let {
+                openMangaDetail(it)
+                presenter.insertManga(it)
+            }
         }
 
         override fun onChapterClick(chapter: Chapter?) {
@@ -76,13 +79,7 @@ class MainActivity : FragmentActivity(),
         }
 
         override fun onTagClick(tag: String?) {
-            tag?.let { viewSearch.setQuery(it, true) }
-        }
-
-        override fun onDeleteManga(manga: Manga?) {
-        }
-
-        override fun onDownloadManga(manga: Manga?) {
+            tag?.also { viewSearch.setQuery(it, true) }
         }
 
         override fun writeToParcel(dest: Parcel?, flags: Int) {

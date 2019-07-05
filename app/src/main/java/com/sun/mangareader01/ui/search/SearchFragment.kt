@@ -47,7 +47,6 @@ class SearchFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter.getMangas(keyword)
         setUpSearchResultView()
         getMangas(keyword)
         mangaAdapter.onItemClickListener = clickListener
