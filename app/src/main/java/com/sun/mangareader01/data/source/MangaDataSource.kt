@@ -1,10 +1,6 @@
 package com.sun.mangareader01.data.source
 
 import com.sun.mangareader01.data.model.*
-import com.sun.mangareader01.data.model.CategoriesResponse
-import com.sun.mangareader01.data.model.Manga
-import com.sun.mangareader01.data.model.MangaDetail
-import com.sun.mangareader01.data.model.MangasResponse
 import com.sun.mangareader01.data.source.local.OnLoadedDataCallback
 import com.sun.mangareader01.utils.Constants.EMPTY_STRING
 
@@ -57,5 +53,22 @@ interface MangaDataSource {
             const val SORT_BY_LAST_RELEASE = "last_release"
             const val SORT_BY_NAME = "name"
         }
+    }
+
+    interface Local {
+
+        fun getMyMangas(
+            callback: OnLoadedDataCallback<MangasResponse>
+        )
+
+        fun insertMangas(
+            manga: Manga,
+            callback: OnLoadedDataCallback<Boolean>
+        )
+
+        fun deleteManga(
+            manga: Manga,
+            callback: OnLoadedDataCallback<Boolean>
+        )
     }
 }

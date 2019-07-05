@@ -1,19 +1,20 @@
 package com.sun.mangareader01.data.source.repository
 
 import com.sun.mangareader01.data.model.*
-import com.sun.mangareader01.data.model.CategoriesResponse
-import com.sun.mangareader01.data.model.Manga
-import com.sun.mangareader01.data.model.MangaDetail
-import com.sun.mangareader01.data.model.MangasResponse
 import com.sun.mangareader01.data.source.MangaDataSource
 import com.sun.mangareader01.data.source.local.OnLoadedDataCallback
 
-object MangaRepository : MangaDataSource.Remote {
+object MangaRepository : MangaDataSource.Remote, MangaDataSource.Local {
 
     private var remote: MangaDataSource.Remote? = null
+    private var local: MangaDataSource.Local? = null
 
-    fun initDataSource(remoteDataSource: MangaDataSource.Remote) {
+    fun initDataSource(
+        remoteDataSource: MangaDataSource.Remote,
+        localDataSource: MangaDataSource.Local? = null
+    ) {
         remote = remoteDataSource
+        local = localDataSource
     }
 
     override fun getMangas(
@@ -77,5 +78,23 @@ object MangaRepository : MangaDataSource.Remote {
 
     override fun getCategories(callback: OnLoadedDataCallback<CategoriesResponse>) {
         remote?.getCategories(callback)
+    }
+
+    override fun getMyMangas(callback: OnLoadedDataCallback<MangasResponse>) {
+        local?.getMyMangas(callback)
+    }
+
+    override fun insertMangas(
+        manga: Manga,
+        callback: OnLoadedDataCallback<Boolean>
+    ) {
+        local?.insertMangas(manga, callback)
+    }
+
+    override fun deleteManga(
+        manga: Manga,
+        callback: OnLoadedDataCallback<Boolean>
+    ) {
+        local?.deleteManga(manga, callback)
     }
 }
