@@ -50,11 +50,11 @@ class HomeFragment : Fragment(), HomeContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         categoryAdapter.onItemClickListener = onItemClickListener
-        recyclerCategories.apply {
+        recyclerCategories?.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = categoryAdapter
         }
-        layoutRandomManga.setOnClickListener {
+        layoutRandomManga?.setOnClickListener {
             onItemClickListener?.onMangaClick(randomManga)
         }
         presenter.getRandomMangaDetail()

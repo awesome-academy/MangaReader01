@@ -85,7 +85,7 @@ class ReadActivity : Activity(),
     }
 
     private fun initView() {
-        recyclerChapterPages.run {
+        recyclerChapterPages?.run {
             layoutManager = LinearLayoutManager(this@ReadActivity)
             adapter = pageAdapter
             addOnScrollListener(onScrollListener)
@@ -95,7 +95,7 @@ class ReadActivity : Activity(),
     private fun updateCurrentPage(
         currentPageNumber: Int, totalPagesNumber: Int?
     ) {
-        textCurrentPageNumber.text = getString(
+        textCurrentPageNumber?.text = getString(
             R.string.text_current_page_number,
             currentPageNumber, totalPagesNumber ?: 0
         )
@@ -107,8 +107,8 @@ class ReadActivity : Activity(),
     }
 
     private fun hideZoomPage() {
-        imageZoom.visibility = View.INVISIBLE
-        imageZoom.setImageDrawable(null)
+        imageZoom?.visibility = View.INVISIBLE
+        imageZoom?.setImageDrawable(null)
     }
 
     companion object {
