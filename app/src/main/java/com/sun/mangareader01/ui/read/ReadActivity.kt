@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
 import android.widget.ImageView
+import androidx.core.app.ShareCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +17,9 @@ import com.sun.mangareader01.data.source.local.MangaLocalDataSource
 import com.sun.mangareader01.data.source.remote.MangaRemoteDataSource
 import com.sun.mangareader01.data.source.repository.MangaRepository
 import com.sun.mangareader01.ui.adapter.PageAdapter
+import com.sun.mangareader01.utils.Constants.TYPE_TEXT_PLAIN
 import com.sun.mangareader01.utils.Extensions.showToast
+import kotlinx.android.synthetic.main.activity_read.imageShareIcon
 import kotlinx.android.synthetic.main.activity_read.imageZoom
 import kotlinx.android.synthetic.main.activity_read.recyclerChapterPages
 import kotlinx.android.synthetic.main.activity_read.textCurrentPageNumber
@@ -62,7 +65,9 @@ class ReadActivity : Activity(),
         super.onCreate(savedInstanceState)
         window.setFlags(FLAG_FULLSCREEN, FLAG_FULLSCREEN)
         setContentView(R.layout.activity_read)
-        chapter = intent?.extras?.getParcelable(BUNDLE_CHAPTER_KEY)
+        intent?.extras?.also {
+            chapter = it.getParcelable(BUNDLE_CHAPTER_KEY)
+        }
         initView()
         chapter?.also { presenter.getPages(it) }
     }
@@ -76,7 +81,20 @@ class ReadActivity : Activity(),
     }
 
     override fun onClick(v: View?) {
-        if (v?.id == R.id.imagePage) displayZoomPage(v as ImageView)
+        when (v?.id) {
+            R.id.imagePage -> displayZoomPage(v as ImageView)
+            R.id.imageShareIcon -> shareChapter()
+        }
+    }
+
+    private fun shareChapter() {
+        chapter?.also {
+            ShareCompat.IntentBuilder
+                .from(this)
+                .setType(TYPE_TEXT_PLAIN)
+                .setText(it.url)
+                .startChooser()
+        }
     }
 
     override fun showPages(pageUrls: List<String>) {
@@ -94,6 +112,7 @@ class ReadActivity : Activity(),
             adapter = pageAdapter
             addOnScrollListener(onScrollListener)
         }
+        imageShareIcon?.setOnClickListener(this)
     }
 
     private fun updateCurrentPage(
