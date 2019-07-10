@@ -1,6 +1,7 @@
 package com.sun.mangareader01.utils
 
 import android.graphics.Color
+import android.net.Uri
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.BackgroundColorSpan
@@ -14,7 +15,6 @@ import com.sun.mangareader01.utils.PathConstants.PATH_MANGA
 import com.sun.mangareader01.utils.PathConstants.PATH_THUMB_FILE_NAME
 import com.sun.mangareader01.utils.PathConstants.PATH_UPLOADS
 import java.text.Normalizer
-
 
 object Helpers {
     fun buildCoverUrl(slug: String) = DataRequest(
@@ -55,4 +55,10 @@ object Helpers {
         .replace("[^a-zA-Z0-9\\s]+".toRegex(), EMPTY_STRING).trim()
         .replace("\\s+".toRegex(), replacement)
         .toLowerCase()
+
+    fun getChapterSlug(pageUrl: String): String =
+        Uri.parse(pageUrl).pathSegments.run { get(size - 2) }
+
+    fun getMangaSlug(pageUrl: String): String =
+        Uri.parse(pageUrl).pathSegments.run { get(size - 4) }
 }

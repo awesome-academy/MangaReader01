@@ -13,7 +13,14 @@ class MangaLocalDataSource(context: Context) : MangaDataSource.Local {
         LoadDataAsync(callback).execute(MangasResponse(database.mangas))
     }
 
-    override fun insertMangas(
+    override fun insertManga(
+        manga: Manga,
+        callback: OnLoadedDataCallback<Boolean>
+    ) {
+        LoadDataAsync(callback).execute(database.insertManga(manga))
+    }
+
+    override fun updateManga(
         manga: Manga,
         callback: OnLoadedDataCallback<Boolean>
     ) {

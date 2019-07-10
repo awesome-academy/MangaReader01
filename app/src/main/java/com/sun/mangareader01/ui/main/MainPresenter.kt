@@ -20,7 +20,7 @@ class MainPresenter(
                 view.showError(exception)
         })
 
-    override fun insertManga(manga: Manga) = repository.insertMangas(
+    override fun insertManga(manga: Manga) = repository.insertManga(
         manga,
         object : OnLoadedDataCallback<Boolean> {
             override fun onSuccessful(data: Boolean) {

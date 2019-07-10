@@ -8,6 +8,7 @@ import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Chapter
 import org.json.JSONArray
 import java.io.BufferedReader
+import java.io.File
 import java.io.IOException
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
@@ -61,5 +62,15 @@ object Extensions {
                 add(Chapter(it.optJSONObject(index)))
             }
         }
+    }
+
+    fun File.warrantExisted(): File {
+        if (!exists()) mkdirs()
+        return this
+    }
+
+    fun File.warrantNotExisted(): File {
+        if (exists()) delete()
+        return this
     }
 }

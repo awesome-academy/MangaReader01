@@ -57,18 +57,12 @@ interface MangaDataSource {
 
     interface Local {
 
-        fun getMyMangas(
-            callback: OnLoadedDataCallback<MangasResponse>
-        )
+        fun getMyMangas(callback: OnLoadedDataCallback<MangasResponse>)
 
-        fun insertMangas(
-            manga: Manga,
-            callback: OnLoadedDataCallback<Boolean>
-        )
+        fun insertManga(manga: Manga, callback: OnLoadedDataCallback<Boolean>)
 
-        fun deleteManga(
-            manga: Manga,
-            callback: OnLoadedDataCallback<Boolean>
-        )
+        fun updateManga(manga: Manga, callback: OnLoadedDataCallback<Boolean>)
+
+        fun deleteManga(manga: Manga, callback: OnLoadedDataCallback<Boolean>)
     }
 }

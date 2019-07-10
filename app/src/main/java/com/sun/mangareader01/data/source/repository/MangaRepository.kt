@@ -84,11 +84,11 @@ object MangaRepository : MangaDataSource.Remote, MangaDataSource.Local {
         local?.getMyMangas(callback)
     }
 
-    override fun insertMangas(
+    override fun insertManga(
         manga: Manga,
         callback: OnLoadedDataCallback<Boolean>
     ) {
-        local?.insertMangas(manga, callback)
+        local?.insertManga(manga, callback)
     }
 
     override fun deleteManga(
@@ -96,5 +96,12 @@ object MangaRepository : MangaDataSource.Remote, MangaDataSource.Local {
         callback: OnLoadedDataCallback<Boolean>
     ) {
         local?.deleteManga(manga, callback)
+    }
+
+    override fun updateManga(
+        manga: Manga,
+        callback: OnLoadedDataCallback<Boolean>
+    ) {
+        local?.updateManga(manga, callback)
     }
 }
