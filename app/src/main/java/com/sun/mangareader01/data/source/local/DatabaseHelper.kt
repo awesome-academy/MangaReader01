@@ -2,6 +2,7 @@ package com.sun.mangareader01.data.source.local
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.sun.mangareader01.data.model.Manga
@@ -20,11 +21,7 @@ class DatabaseHelper(context: Context) :
             cursor?.run {
                 moveToFirst()
                 while (!isAfterLast) {
-                    val manga = Manga(
-                        title = getString(getColumnIndex(Tables.Manga.COL_TITLE)),
-                        slug = getString(getColumnIndex(Tables.Manga.COL_SLUG))
-                    )
-                    mangas.add(manga)
+                    mangas.add(exportManga(cursor))
                     moveToNext()
                 }
                 close()
@@ -61,32 +58,24 @@ class DatabaseHelper(context: Context) :
 
     fun getManga(id: Int): Manga? {
         val db = readableDatabase
-        var manga: Manga? = null
         val cursor = db.rawQuery(Tables.Manga.SELECT_BY_ID.format(id), null)
-        cursor?.run {
-            moveToFirst()
-            manga = Manga(
-                title = getString(getColumnIndex(Tables.Manga.COL_TITLE)),
-                slug = getString(getColumnIndex(Tables.Manga.COL_SLUG))
-            )
-            close()
-        }
-        return manga
+        return getManga(cursor)
+    }
+
+    fun getManga(slug: String): Manga? {
+        val db = readableDatabase
+        val cursor = db.rawQuery(Tables.Manga.SELECT_BY_SLUG.format(slug), null)
+        return getManga(cursor)
     }
 
     @Synchronized
     fun updateManga(manga: Manga): Boolean {
-        if(insertManga(manga)) return true
-        val db = this.writableDatabase
         val values = createContentValues(manga)
-        val result = db.update(
-            Tables.Manga.TABLE_NAME,
-            values,
-            Tables.Manga.COL_SLUG + "=?",
-            arrayOf(manga.slug)
-        ) != -1
-        db.close()
-        return result
+        writableDatabase.run {
+            replace(Tables.Manga.TABLE_NAME, null, values)
+            close()
+        }
+        return true
     }
 
     @Synchronized
@@ -104,7 +93,29 @@ class DatabaseHelper(context: Context) :
     private fun createContentValues(manga: Manga) = ContentValues().apply {
         put(Tables.Manga.COL_TITLE, manga.title)
         put(Tables.Manga.COL_SLUG, manga.slug)
+        put(Tables.Manga.COL_SAVED, manga.saved.toString().toUpperCase())
         put(Tables.Manga.COL_UPDATED_AT, currentTime)
+    }
+
+    private fun exportManga(cursor: Cursor): Manga {
+        with(cursor) {
+            return Manga(
+                title = getString(getColumnIndex(Tables.Manga.COL_TITLE)),
+                slug = getString(getColumnIndex(Tables.Manga.COL_SLUG)),
+                saved = getString(getColumnIndex(Tables.Manga.COL_SAVED))
+                    == true.toString().toUpperCase()
+            )
+        }
+    }
+
+    private fun getManga(cursor: Cursor?): Manga? {
+        var manga: Manga? = null
+        cursor?.run {
+            moveToFirst()
+            manga = exportManga(this)
+            close()
+        }
+        return manga
     }
 
     companion object {
@@ -114,22 +125,26 @@ class DatabaseHelper(context: Context) :
     }
 
     object Tables {
+
         object Manga {
             const val TABLE_NAME = "manga"
             const val COL_ID = "id"
             const val COL_TITLE = "title"
             const val COL_SLUG = "slug"
+            const val COL_SAVED = "saved"
             const val COL_UPDATED_AT = "updated_at"
             const val CREATE_TABLE = "CREATE TABLE IF NOT EXISTS $TABLE_NAME(" +
-                COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COL_TITLE + " TEXT NOT NULL," +
-                COL_SLUG + " TEXT UNIQUE NOT NULL," +
+                COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_TITLE + " TEXT NOT NULL, " +
+                COL_SLUG + " TEXT UNIQUE NOT NULL, " +
+                COL_SAVED + " BOOLEAN DEFAULT FALSE, " +
                 COL_UPDATED_AT + " DATETIME DEFAULT CURRENT_TIMESTAMP)"
             const val DROP_TABLE = "DROP TABLE IF EXISTS $TABLE_NAME"
             const val SELECT_ALL = "SELECT * FROM $TABLE_NAME ORDER BY " +
                 "$COL_UPDATED_AT DESC"
-            const val SELECT_BY_ID = "SELECT DISTINCT * FROM $TABLE_NAME " +
-                "WHERE $COL_ID = %d LIMIT 1"
+            private const val SELECT = "SELECT DISTINCT * FROM $TABLE_NAME"
+            const val SELECT_BY_ID = SELECT + "WHERE $COL_ID = %d LIMIT 1"
+            const val SELECT_BY_SLUG = SELECT + "WHERE $COL_SLUG = %s LIMIT 1"
         }
     }
 }
