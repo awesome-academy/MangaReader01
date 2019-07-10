@@ -12,4 +12,6 @@
     <string name="text_chapters">Chapters</string>
     <string name="text_load_more">Load more…</string>
     <string name="text_current_page_number">Page %d of %d</string>
+    <string name="text_saved">Saved</string>
+    <string name="text_update_done">%d/%d</string>
 </resources>

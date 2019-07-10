@@ -19,10 +19,7 @@ import com.sun.mangareader01.data.source.repository.MangaRepository
 import com.sun.mangareader01.ui.adapter.PageAdapter
 import com.sun.mangareader01.utils.Constants.TYPE_TEXT_PLAIN
 import com.sun.mangareader01.utils.Extensions.showToast
-import kotlinx.android.synthetic.main.activity_read.imageShareIcon
-import kotlinx.android.synthetic.main.activity_read.imageZoom
-import kotlinx.android.synthetic.main.activity_read.recyclerChapterPages
-import kotlinx.android.synthetic.main.activity_read.textCurrentPageNumber
+import kotlinx.android.synthetic.main.activity_read.*
 
 
 class ReadActivity : Activity(),
@@ -84,6 +81,8 @@ class ReadActivity : Activity(),
         when (v?.id) {
             R.id.imagePage -> displayZoomPage(v as ImageView)
             R.id.imageShareIcon -> shareChapter()
+            R.id.imageDownloadIcon -> chapter?.also {
+            }
         }
     }
 
@@ -98,12 +97,22 @@ class ReadActivity : Activity(),
     }
 
     override fun showPages(pageUrls: List<String>) {
+        chapter?.pageUrls?.run {
+            clear()
+            addAll(pageUrls)
+        }
         pageAdapter.updateData(pageUrls)
         updateCurrentPage(FIRST_PAGE_NUMBER, pageAdapter.itemCount)
     }
 
     override fun showError(exception: Exception) {
         showToast(exception.toString())
+    }
+
+    override fun updateSavingChapter(done: Int) {
+    }
+
+    override fun confirmSavedChapter() {
     }
 
     private fun initView() {
@@ -113,6 +122,7 @@ class ReadActivity : Activity(),
             addOnScrollListener(onScrollListener)
         }
         imageShareIcon?.setOnClickListener(this)
+        imageDownloadIcon?.setOnClickListener(this)
     }
 
     private fun updateCurrentPage(
