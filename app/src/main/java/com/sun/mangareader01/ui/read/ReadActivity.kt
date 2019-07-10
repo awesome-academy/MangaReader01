@@ -81,8 +81,6 @@ class ReadActivity : Activity(),
         when (v?.id) {
             R.id.imagePage -> displayZoomPage(v as ImageView)
             R.id.imageShareIcon -> shareChapter()
-            R.id.imageDownloadIcon -> chapter?.also {
-            }
         }
     }
 
@@ -107,12 +105,6 @@ class ReadActivity : Activity(),
 
     override fun showError(exception: Exception) {
         showToast(exception.toString())
-    }
-
-    override fun updateSavingChapter(done: Int) {
-    }
-
-    override fun confirmSavedChapter() {
     }
 
     private fun initView() {

@@ -6,7 +6,7 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Chapter
-import com.sun.mangareader01.utils.blur.BlurTransformation
+import com.sun.mangareader01.utils.Constants.RADIUS_BLUR
 import org.json.JSONArray
 import java.io.BufferedReader
 import java.io.File
@@ -47,7 +47,14 @@ object Extensions {
             .load(url)
             .apply {
                 if (circleCrop) circleCrop()
-                if (blurred) transform(BlurTransformation())
+                if (blurred) {
+                    transform(
+                        BlurTransformation(
+                            context,
+                            RADIUS_BLUR
+                        )
+                    )
+                }
             }
             .placeholder(defaultResourceId)
             .into(this)

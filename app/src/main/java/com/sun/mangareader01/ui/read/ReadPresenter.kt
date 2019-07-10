@@ -1,6 +1,5 @@
 package com.sun.mangareader01.ui.read
 
-import android.content.Context
 import com.sun.mangareader01.data.model.Chapter
 import com.sun.mangareader01.data.model.PagesResponse
 import com.sun.mangareader01.data.source.local.OnLoadedDataCallback

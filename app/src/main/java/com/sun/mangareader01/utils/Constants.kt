@@ -8,4 +8,5 @@ object Constants {
     const val AUTHORITY_READ_COMICS_ONLINE = "readcomicsonline.ru"
     const val EMPTY_STRING = ""
     const val FACEBOOK_PACKAGE = "com.facebook.katana"
+    const val RADIUS_BLUR = 20F
 }
