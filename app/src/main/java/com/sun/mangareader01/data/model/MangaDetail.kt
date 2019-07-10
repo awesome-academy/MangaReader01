@@ -37,9 +37,14 @@ data class MangaDetail(
         slug = slugify(title)
     )
 
-    fun getPagesNumber() : Int {
+    fun getPagesNumber(): Int {
         var pagesNumber = 0
         chapters.forEach { pagesNumber += it.pageUrls.size }
         return pagesNumber
     }
+
+    fun getAllPageUrls() = ArrayList<String>().apply {
+        for (chapter in chapters) addAll(chapter.pageUrls)
+    }
+
 }

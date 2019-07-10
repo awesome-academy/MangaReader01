@@ -12,14 +12,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Manga
+import com.sun.mangareader01.data.model.MangaDetail
+import com.sun.mangareader01.data.source.local.SavePagesCallback
+import com.sun.mangareader01.data.source.remote.SavePagesAsync
 import com.sun.mangareader01.data.source.repository.MangaRepository
 import com.sun.mangareader01.ui.adapter.ActionMangaAdapter
 import com.sun.mangareader01.ui.adapter.MangaAdapter
 import com.sun.mangareader01.ui.listener.OnItemClickListener
 import com.sun.mangareader01.ui.listener.OnMangaActionListener
 import com.sun.mangareader01.utils.Extensions.showToast
+import com.sun.mangareader01.utils.FileHelpers
 import kotlinx.android.synthetic.main.fragment_my_comics.barLoading
+import kotlinx.android.synthetic.main.fragment_my_comics.barSaving
 import kotlinx.android.synthetic.main.fragment_my_comics.recyclerMyComics
+import java.io.IOException
 
 class MyComicsFragment : Fragment(),
     MyComicsContract.View {
@@ -27,9 +33,7 @@ class MyComicsFragment : Fragment(),
     private val presenter: MyComicsContract.Presenter by lazy {
         MyComicsPresenter(this, MangaRepository)
     }
-    private val mangas: MutableList<Manga> by lazy {
-        mutableListOf<Manga>()
-    }
+    private val mangas: MutableList<Manga> by lazy { mutableListOf<Manga>() }
     private val mangaAdapter: ActionMangaAdapter by lazy {
         MangaAdapter(mangas)
     }
@@ -56,6 +60,11 @@ class MyComicsFragment : Fragment(),
         }
 
         override fun onDownloadManga(manga: Manga?) {
+            manga?.also {
+                context?.showToast(NOTICE_START_SAVING)
+                displaySavingBar()
+                presenter.saveManga(it)
+            }
         }
     }
 
@@ -90,10 +99,56 @@ class MyComicsFragment : Fragment(),
     override fun showError(exception: Exception) {
         context?.showToast(exception.toString())
         hideLoadingBar()
+        hideSavingBar()
     }
 
-    override fun confirmDeleted(successful: Boolean) {
-        if (!successful) presenter.getMyMangas()
+    override fun deleteMangaFiles(manga: Manga) {
+        FileHelpers.deleteManga(context, manga) { exception ->
+            exception?.let { showError(IOException()) }
+                ?: presenter.getMyMangas()
+        }
+    }
+
+    override fun downloadMangaFiles(mangaDetail: MangaDetail) {
+        val manga = mangas.first { it.title == mangaDetail.title }
+        val pageUrls = mangaDetail.getAllPageUrls()
+        val total = pageUrls.size
+        context?.showToast(NOTICE_START_SAVING)
+        context?.run {
+            SavePagesAsync(this, object : SavePagesCallback {
+                override fun onComplete(isSuccessful: Boolean) {
+                    if (isSuccessful) confirmDownloaded(manga)
+                }
+
+                override fun onUpdate(done: Int) {
+                    updateSaving(percent = done * 100 / total)
+                }
+            }).execute(pageUrls)
+        }
+    }
+
+    override fun showNoticeLoadPageUrls() {
+        context?.showToast(NOTICE_LOAD_PAGE_URLS)
+    }
+
+    private fun confirmDownloaded(manga: Manga) {
+        hideSavingBar()
+        manga.saved = true
+        presenter.updateManga(manga)
+        context?.showToast(NOTICE_SAVED_COMPLETE.format(manga.title))
+    }
+
+    private fun updateSaving(percent: Int) {
+        barSaving?.progress = percent
+    }
+
+
+    private fun displaySavingBar() {
+        barSaving?.visibility = View.VISIBLE
+    }
+
+    private fun hideSavingBar() {
+        barSaving?.visibility = View.INVISIBLE
     }
 
     private fun showLoadingBar() {
@@ -106,6 +161,9 @@ class MyComicsFragment : Fragment(),
 
     companion object {
 
+        private const val NOTICE_START_SAVING = "Start saving..."
+        private const val NOTICE_SAVED_COMPLETE = "Complete saved %s !"
+        private const val NOTICE_LOAD_PAGE_URLS = "Start loading page urls..."
         private const val BUNDLE_CLICK_LISTENER_KEY = "clickListener"
 
         fun newInstance(clickListener: OnItemClickListener) =

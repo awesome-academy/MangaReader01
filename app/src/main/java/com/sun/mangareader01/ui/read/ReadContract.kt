@@ -7,6 +7,7 @@ interface ReadContract {
         fun showPages(pageUrls: List<String>)
         fun showError(exception: Exception)
     }
+
     interface Presenter {
         fun getPages(chapter: Chapter)
     }

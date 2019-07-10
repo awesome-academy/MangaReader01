@@ -66,7 +66,7 @@ class MainActivity : FragmentActivity(),
             setIsTypingSearch(false)
             manga?.let {
                 openMangaDetail(it)
-                presenter.insertManga(it)
+                presenter.updateManga(it)
             }
         }
 

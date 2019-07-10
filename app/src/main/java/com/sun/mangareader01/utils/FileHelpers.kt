@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import com.sun.mangareader01.data.model.Chapter
 import com.sun.mangareader01.data.model.Manga
+import com.sun.mangareader01.utils.Constants.NOT_CONTEXT
 import com.sun.mangareader01.utils.FileHelpers.DirFormat.PATH_SAVE_CHAPTER
 import com.sun.mangareader01.utils.FileHelpers.DirFormat.PATH_SAVE_MANGA
 import java.io.File
@@ -31,6 +32,21 @@ object FileHelpers {
         val urls = ArrayList<String>()
         for (file in files) urls.add(file.path)
         return urls
+    }
+
+    fun deleteManga(
+        context: Context?,
+        manga: Manga,
+        handleResult: (Exception?) -> Unit
+    ) {
+        context?.also {
+            try {
+                getMangaDir(it, manga).deleteRecursively()
+            } catch (exception: Exception) {
+                handleResult(exception)
+            }
+            handleResult(null)
+        } ?: handleResult(Exception(NOT_CONTEXT))
     }
 
     object DirFormat {
