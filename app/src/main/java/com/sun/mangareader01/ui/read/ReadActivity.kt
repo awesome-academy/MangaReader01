@@ -14,15 +14,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Chapter
 import com.sun.mangareader01.data.source.local.MangaLocalDataSource
+import com.sun.mangareader01.data.source.local.SavePagesCallback
 import com.sun.mangareader01.data.source.remote.MangaRemoteDataSource
+import com.sun.mangareader01.data.source.remote.SavePagesAsync
 import com.sun.mangareader01.data.source.repository.MangaRepository
 import com.sun.mangareader01.ui.adapter.PageAdapter
 import com.sun.mangareader01.utils.Constants.TYPE_TEXT_PLAIN
 import com.sun.mangareader01.utils.Extensions.showToast
-import kotlinx.android.synthetic.main.activity_read.imageShareIcon
-import kotlinx.android.synthetic.main.activity_read.imageZoom
-import kotlinx.android.synthetic.main.activity_read.recyclerChapterPages
-import kotlinx.android.synthetic.main.activity_read.textCurrentPageNumber
+import com.sun.mangareader01.utils.FileHelpers
+import kotlinx.android.synthetic.main.activity_read.*
 
 
 class ReadActivity : Activity(),
@@ -69,7 +69,15 @@ class ReadActivity : Activity(),
             chapter = it.getParcelable(BUNDLE_CHAPTER_KEY)
         }
         initView()
-        chapter?.also { presenter.getPages(it) }
+        chapter?.also {
+            val chapterDir = FileHelpers.getChapterDir(this, it)
+            if (chapterDir.exists()) {
+                hideDownloadIcon()
+                showPages(FileHelpers.getPageUrls(chapterDir))
+            } else {
+                presenter.getPages(it)
+            }
+        }
     }
 
     override fun onBackPressed() {
@@ -84,6 +92,15 @@ class ReadActivity : Activity(),
         when (v?.id) {
             R.id.imagePage -> displayZoomPage(v as ImageView)
             R.id.imageShareIcon -> shareChapter()
+            R.id.imageDownloadIcon -> chapter?.also {
+                SavePagesAsync(this, object : SavePagesCallback {
+                    override fun onComplete(isSuccessful: Boolean) =
+                        confirmSavedChapter()
+
+                    override fun onUpdate(done: Int) =
+                        updateSavingChapter(done)
+                }).execute(it.pageUrls)
+            }
         }
     }
 
@@ -98,12 +115,29 @@ class ReadActivity : Activity(),
     }
 
     override fun showPages(pageUrls: List<String>) {
+        chapter?.pageUrls?.run {
+            clear()
+            addAll(pageUrls)
+        }
         pageAdapter.updateData(pageUrls)
         updateCurrentPage(FIRST_PAGE_NUMBER, pageAdapter.itemCount)
     }
 
+
     override fun showError(exception: Exception) {
         showToast(exception.toString())
+    }
+
+    private fun updateSavingChapter(done: Int) {
+        val total = chapter?.pageUrls?.size ?: 0
+        textDownloadUpdate?.text = getString(
+            R.string.text_update_done,
+            done, total
+        )
+    }
+
+    private fun confirmSavedChapter() {
+        textDownloadUpdate?.text = getString(R.string.text_saved)
     }
 
     private fun initView() {
@@ -113,6 +147,7 @@ class ReadActivity : Activity(),
             addOnScrollListener(onScrollListener)
         }
         imageShareIcon?.setOnClickListener(this)
+        imageDownloadIcon?.setOnClickListener(this)
     }
 
     private fun updateCurrentPage(
@@ -132,6 +167,10 @@ class ReadActivity : Activity(),
     private fun hideZoomPage() {
         imageZoom?.visibility = View.INVISIBLE
         imageZoom?.setImageDrawable(null)
+    }
+
+    private fun hideDownloadIcon() {
+        imageDownloadIcon?.visibility = View.INVISIBLE
     }
 
     companion object {

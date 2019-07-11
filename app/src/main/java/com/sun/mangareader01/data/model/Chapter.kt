@@ -21,5 +21,6 @@ data class Chapter(
         uploadDate = jsonObject.optString(JSON_KEY_DATE)
     )
 
-    fun getMangaSlug() = Uri.parse(url).pathSegments.run { get(size - 2) }
+    fun getMangaSlug(): String =
+        Uri.parse(url).pathSegments.run { get(size - 2) }
 }

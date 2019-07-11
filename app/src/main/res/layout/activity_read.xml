@@ -46,6 +46,26 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:ignore="ContentDescription"/>
+    <ImageView
+            android:id="@+id/imageDownloadIcon"
+            android:src="@drawable/ic_file_download_black_24dp"
+            android:tint="@color/color_white"
+            android:layout_width="@dimen/dp_48"
+            android:layout_height="@dimen/dp_48"
+            android:scaleType="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:ignore="ContentDescription"/>
+    <TextView
+            android:id="@+id/textDownloadUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/sp_18"
+            app:layout_constraintStart_toEndOf="@id/imageDownloadIcon"
+            app:layout_constraintBottom_toBottomOf="@id/imageDownloadIcon"
+            app:layout_constraintTop_toTopOf="@id/imageDownloadIcon"
+    />
     <com.sun.mangareader01.utils.TouchImageView
             android:id="@+id/imageZoom"
             android:layout_width="0dp"

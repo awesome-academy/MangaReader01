@@ -67,12 +67,16 @@ class DetailFragment : Fragment(),
     }
 
     override fun showError(exception: Exception) {
+        hideLoading()
         context?.showToast(exception.toString())
     }
 
     private fun showExistDetails() {
         textMangaTitle?.text = manga.title
-        imageBackComicCover?.setImageUrl(buildCoverUrl(manga.slug))
+        imageBackComicCover?.setImageUrl(
+            url = buildCoverUrl(manga.slug),
+            blurred = true
+        )
         imageComicCover?.setImageUrl(buildCoverUrl(manga.slug))
     }
 

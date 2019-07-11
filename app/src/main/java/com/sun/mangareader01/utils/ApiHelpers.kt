@@ -2,6 +2,7 @@ package com.sun.mangareader01.utils
 
 import android.net.Uri
 import com.sun.mangareader01.data.model.*
+import com.sun.mangareader01.data.source.remote.MangaRemoteDataSource.Companion.KEY_CATEGORY
 import com.sun.mangareader01.utils.ApiHelpers.ApiFilteredMangas.CssQuery.ATTR_HREF
 import com.sun.mangareader01.utils.Constants.EMPTY_STRING
 import org.json.JSONArray
@@ -33,7 +34,7 @@ class ApiHelpers {
         }
 
         private fun getCategoryId(url: String) =
-            url.substringAfterLast('=').toInt()
+            Uri.parse(url).getQueryParameters(KEY_CATEGORY).first().toInt()
 
         companion object {
             const val LIST_CATEGORY = ".list-category"
