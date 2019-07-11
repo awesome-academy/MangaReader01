@@ -82,14 +82,20 @@ open class MangaAdapter(
                 onMangaActionListener?.onDeleteManga(item)
             }
             itemView.imageDownload?.setOnClickListener {
+                hideImageDownload()
                 onMangaActionListener?.onDownloadManga(item)
             }
+        }
+
+        private fun hideImageDownload() {
+            itemView.imageDownload?.visibility = View.INVISIBLE
         }
 
         fun bindData(manga: Manga) {
             item = manga
             textSuggestionTitle.text = manga.title
             imageMangaItemCover.setImageUrl(Helpers.buildCoverUrl(manga.slug))
+            if (manga.saved) hideImageDownload()
         }
     }
 

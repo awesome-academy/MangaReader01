@@ -72,7 +72,10 @@ class DetailFragment : Fragment(),
 
     private fun showExistDetails() {
         textMangaTitle?.text = manga.title
-        imageBackComicCover?.setImageUrl(buildCoverUrl(manga.slug))
+        imageBackComicCover?.setImageUrl(
+            url = buildCoverUrl(manga.slug),
+            blurred = true
+        )
         imageComicCover?.setImageUrl(buildCoverUrl(manga.slug))
     }
 

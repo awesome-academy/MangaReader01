@@ -6,6 +6,7 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.sun.mangareader01.R
 import com.sun.mangareader01.data.model.Chapter
+import com.sun.mangareader01.utils.Constants.RADIUS_BLUR
 import org.json.JSONArray
 import java.io.BufferedReader
 import java.io.File
@@ -39,11 +40,22 @@ object Extensions {
     fun ImageView.setImageUrl(
         url: String,
         circleCrop: Boolean = false,
-        defaultResourceId: Int = R.color.color_light_gray
+        defaultResourceId: Int = R.color.color_light_gray,
+        blurred: Boolean = false
     ) {
         Glide.with(context)
             .load(url)
-            .apply { if (circleCrop) circleCrop() }
+            .apply {
+                if (circleCrop) circleCrop()
+                if (blurred) {
+                    transform(
+                        BlurTransformation(
+                            context,
+                            RADIUS_BLUR
+                        )
+                    )
+                }
+            }
             .placeholder(defaultResourceId)
             .into(this)
     }
