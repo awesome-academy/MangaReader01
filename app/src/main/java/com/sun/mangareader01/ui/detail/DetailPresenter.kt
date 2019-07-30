@@ -1,9 +1,7 @@
 package com.sun.mangareader01.ui.detail
 
-import com.sun.mangareader01.data.model.Chapter
 import com.sun.mangareader01.data.model.Manga
 import com.sun.mangareader01.data.model.MangaDetail
-import com.sun.mangareader01.data.model.PagesResponse
 import com.sun.mangareader01.data.source.local.OnLoadedDataCallback
 import com.sun.mangareader01.data.source.repository.MangaRepository
 
